@@ -24,8 +24,9 @@
 
         // public variables
         var dashboardTemplate = dashboard.template.toLowerCase();
-        if (dashboardTemplate == 'capone' || dashboardTemplate == 'product-dashboard' || dashboardTemplate == 'caponechatops' || dashboardTemplate == 'cloud' ||
-            dashboardTemplate == 'splitview') {
+        if (dashboardTemplate == 'capone' || dashboardTemplate == 'stech_multi_1' || dashboardTemplate == 'stech_multi_2' || 
+            dashboardTemplate == 'product-dashboard' || dashboardTemplate == 'caponechatops' || 
+            dashboardTemplate == 'cloud' || dashboardTemplate == 'splitview') {
             ctrl.templateUrl = 'components/templates/' + dashboardTemplate + '.html';
         }
         else if(dashboardTemplate == 'widgets') {

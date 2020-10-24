@@ -495,6 +495,7 @@
                 options: options
             };
 
+            console.log("**Vivek** product view, updateWidgetOptions data = ", data);
             $scope.upsertWidget(data);
         }
 
@@ -508,12 +509,26 @@
             var team = teamDashboardDetails[collectorItemId],
                 componentId = team.application.components[0].id;
 
+            console.log("**Vivek** product view, getTeamComponentData team = ", team);
+
             function getCaMetric(metrics, name, fallback) {
                 var val = fallback === undefined ? false : fallback;
                 _(metrics).filter({name:name}).forEach(function(item) {
                     val = item.value || parseFloat(item.formattedValue);
                 });
                 return val;
+            }
+            function getMyComponentId(widgetName) {
+                var component2Id = []
+                for (var i = 0; i < team.application.components.length; i++) {
+                    for (var j = 0; j < team.widgets.length; j++) {
+                        if ( team.widgets[j].name == widgetName && team.application.components[i].id == team.widgets[j].componentId) {
+                            component2Id.push(team.application.components[i].id); 
+                            break;
+                        }
+                    }
+                }
+                return component2Id;
             }
 
             var processDependencyObject = {
@@ -524,14 +539,27 @@
                 cleanseData: cleanseData,
                 isReload: isReload,
                 $timeout: $timeout,
-                $q: $q
+                $q: $q,
+                component2Id:[]
             };
+            //console.log("**Vivek** product view, getTeamComponentData processDependencyObject = ", processDependencyObject);
 
             // request and process our data
-            productBuildData.process(angular.extend(processDependencyObject, { buildData: buildData }));
+            processDependencyObject.component2Id = getMyComponentId('codeanalysis');
+            if (processDependencyObject.component2Id.length > 0) {
+                processDependencyObject.componentId = processDependencyObject.component2Id[processDependencyObject.component2Id.length - 1];
+                processDependencyObject.component2Id.pop();
+            }
             productSecurityAnalysisData.process(angular.extend(processDependencyObject, { codeAnalysisData: codeAnalysisData, getCaMetric: getCaMetric }));
             productCodeAnalysisData.process(angular.extend(processDependencyObject, { codeAnalysisData: codeAnalysisData, getCaMetric: getCaMetric }));
             productTestSuiteData.process(angular.extend(processDependencyObject, { testSuiteData: testSuiteData }));
+
+            processDependencyObject.component2Id = getMyComponentId('build');
+            if (processDependencyObject.component2Id.length > 0) {
+                processDependencyObject.componentId = processDependencyObject.component2Id[processDependencyObject.component2Id.length - 1];
+                processDependencyObject.component2Id.pop();
+            }
+            productBuildData.process(angular.extend(processDependencyObject, { buildData: buildData }));
         }
 
         function collectTeamStageData(teams, teamCtrlStages) {

@@ -10,7 +10,7 @@
         labelClass: 'ct-label',
         labelOffset: {
             x: 0,
-            y: -10
+            y: -7  // better visibility of topmost y label
         },
         textAnchor: 'middle'
     };

@@ -40,6 +40,12 @@
             return value;
         }
 
+        this.getDashboardAppName = function (data) {
+            var applicationName = data.application && data.application.name ? data.application.name : "**No-Name**" ;
+
+            return applicationName;
+        }
+
         this.getDashboardTitle = function (data) {
             var title = data.title;
             var businessServiceName = data.configurationItemBusServName ? "-" + data.configurationItemBusServName : "";
@@ -54,6 +60,7 @@
 
             return title;
         }
+
         this.getDashboardTitleOrig = function(data){
             var subName = data.name.substring(0, data.name.indexOf('-'));
 

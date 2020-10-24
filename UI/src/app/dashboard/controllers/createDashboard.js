@@ -30,6 +30,8 @@
         // TODO: dynamically register templates with script
         ctrl.templates = [
             {value: 'capone', name: 'Cap One', type: DashboardType.TEAM},
+            {value: 'stech_multi_1', name: 'SarvaTech 1 - Based on Cap One', type: DashboardType.TEAM},
+            {value: 'stech_multi_2', name: 'SarvaTech 2 - Based on Cap One', type: DashboardType.TEAM},
             {value: 'caponechatops', name: 'Cap One ChatOps', type: DashboardType.TEAM},
             {value: 'cloud', name: 'Cloud Dashboard', type: DashboardType.TEAM},
             {value: 'splitview', name: 'Split View', type: DashboardType.TEAM},
@@ -128,6 +130,7 @@
                         componentName: appName,
                         configurationItemBusServName: configBusSerItem,
                         configurationItemBusAppName: configBusAppItem,
+                        compCount: "1",
                         scoreEnabled : ctrl.scoreSettings.scoreEnabled,
                         scoreDisplay : ctrl.scoreSettings.scoreDisplay
                     };
@@ -148,6 +151,7 @@
                             componentName: appName,
                             configurationItemBusServName: configBusSerItem,
                             configurationItemBusAppName: configBusAppItem,
+                            compCount: (templateValue == "stech_multi_2" || templateValue == "stech_multi_1") ? "2" : "1",
                             scoreEnabled : ctrl.scoreSettings.scoreEnabled,
                             scoreDisplay : ctrl.scoreSettings.scoreDisplay
                         };

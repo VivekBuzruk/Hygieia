@@ -92,6 +92,23 @@
             }
         }
 
+        var getDashboard = function (dashboardData) {
+            var board = {
+                id: dashboardData.id,
+                name: dashboardService.getDashboardTitle(dashboardData),
+                type: dashboardData.type,
+                appName: dashboardService.getDashboardAppName(dashboardData),
+                validServiceName: dashboardData.validServiceName,
+                validAppName: dashboardData.validAppName,
+                configurationItemBusServName: dashboardData.configurationItemBusServName,
+                configurationItemBusAppName: dashboardData.configurationItemBusAppName,
+                isProduct: dashboardData.type && dashboardData.type.toLowerCase() === DashboardType.PRODUCT.toLowerCase(),
+                scoreEnabled: dashboardData.scoreEnabled,
+                scoreDisplay: dashboardData.scoreDisplay
+            };
+            return board;
+        }
+
         this.processDashboardResponse = function (response) {
             var data = response.data;
             var type = response.type;
@@ -101,19 +118,7 @@
             var dashboardsLocal = [];
 
             for (var x = 0; x < data.length; x++) {
-                var board = {
-                    id: data[x].id,
-                    name: dashboardService.getDashboardTitle(data[x]),
-                    type: data[x].type,
-                    validServiceName: data[x].validServiceName,
-                    validAppName: data[x].validAppName,
-                    configurationItemBusServName: data[x].configurationItemBusServName,
-                    configurationItemBusAppName: data[x].configurationItemBusAppName,
-                    isProduct: data[x].type && data[x].type.toLowerCase() === DashboardType.PRODUCT.toLowerCase(),
-                    scoreEnabled: data[x].scoreEnabled,
-                    scoreDisplay: data[x].scoreDisplay
-                };
-
+                var board = getDashboard(data[x]);
                 if(board.isProduct) {
                     //console.log(board);
                 }
@@ -163,6 +168,24 @@
             return dashboards;
         }
 
+        var getMyDashboard = function (dashboardData, showErrorVal) {
+            var board = {
+                id: dashboardData.id,
+                name: dashboardService.getDashboardTitle(dashboardData),
+                type: dashboardData.type,
+                isProduct: dashboardData.type && dashboardData.type.toLowerCase() === DashboardType.PRODUCT.toLowerCase(),
+                appName: dashboardService.getDashboardAppName(dashboardData),
+                validServiceName: dashboardData.validServiceName,
+                validAppName: dashboardData.validAppName,
+                configurationItemBusServName: dashboardData.configurationItemBusServName,
+                configurationItemBusAppName: dashboardData.configurationItemBusAppName,
+                showError: showErrorVal,
+                scoreEnabled: dashboardData.scoreEnabled,
+                scoreDisplay: dashboardData.scoreDisplay
+            };
+            return board;
+        }
+
         this.processMyDashboardResponse = function (response) {
             var mydata = response.data;
             var type = response.type;
@@ -173,19 +196,8 @@
 
             for (var x = 0; x < mydata.length; x++) {
                 var showErrorVal = getInvalidAppOrCompError(mydata[x]);
-                dashboardsLocal.push({
-                    id: mydata[x].id,
-                    name: dashboardService.getDashboardTitle(mydata[x]),
-                    type: mydata[x].type,
-                    isProduct: mydata[x].type && mydata[x].type.toLowerCase() === DashboardType.PRODUCT.toLowerCase(),
-                    validServiceName:  mydata[x].validServiceName,
-                    validAppName: mydata[x].validAppName,
-                    configurationItemBusServName:  mydata[x].configurationItemBusServName,
-                    configurationItemBusAppName:  mydata[x].configurationItemBusAppName,
-                    showError: showErrorVal,
-                    scoreEnabled: mydata[x].scoreEnabled,
-                    scoreDisplay: mydata[x].scoreDisplay
-                });
+                var board = getMyDashboard(mydata[x], showErrorVal);
+                dashboardsLocal.push(board);
             }
 
             mydash = dashboardsLocal;
@@ -207,19 +219,8 @@
 
             for (var x = 0; x < mydata.length; x++) {
                 var showErrorVal = getInvalidAppOrCompError(mydata[x]);
-                dashboardsLocal.push({
-                    id: mydata[x].id,
-                    name: dashboardService.getDashboardTitle(mydata[x]),
-                    type: mydata[x].type,
-                    isProduct: mydata[x].type && mydata[x].type.toLowerCase() === DashboardType.PRODUCT.toLowerCase(),
-                    validServiceName:  mydata[x].validServiceName,
-                    validAppName: mydata[x].validAppName,
-                    configurationItemBusServName:  mydata[x].configurationItemBusServName,
-                    configurationItemBusAppName:  mydata[x].configurationItemBusAppName,
-                    showError: showErrorVal,
-                    scoreEnabled: mydata[x].scoreEnabled,
-                    scoreDisplay: mydata[x].scoreDisplay
-                });
+                var board =  getMyDashboard(mydata[x], showErrorVal);
+                dashboardsLocal.push(board);
             }
 
             mydash = dashboardsLocal;

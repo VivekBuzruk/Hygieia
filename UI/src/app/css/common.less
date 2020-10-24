@@ -343,11 +343,11 @@ body {
 // WIDGET
 // ========================================
 .widget {
-    padding: 2.5rem 3rem;
+    padding: 2rem 2rem;
     .border-radius(@dash-widget-border-radius);
 
     .widget {
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
     }
 
     // heading in a widget
@@ -356,7 +356,7 @@ body {
         color: @dash-widget-heading-text;
         letter-spacing: .1rem;
         padding-bottom: .5rem;
-        margin-bottom: 1.75rem;
+        margin-bottom: 1.5rem;
 
         .text-lg;
         .border-top-radius(@dash-widget-border-radius);
@@ -509,6 +509,15 @@ body {
         margin-bottom: 3rem;
         padding: 1rem;
         text-align: center;
+    }
+
+    .widget-appmodal-heading {
+        border-bottom: 1px solid @dash-modal-heading-border;
+        color: @dash-modal-heading-text;
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        text-align: left;
     }
 
     .widget-modal-heading-markup {
@@ -960,3 +969,4 @@ tr.dash-row > td {
     background-color: @dash-widget-section-highlight;
     opacity: 0.5;
 }
+

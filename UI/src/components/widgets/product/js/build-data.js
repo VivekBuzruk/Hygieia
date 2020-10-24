@@ -28,7 +28,14 @@
             ninetyDaysAgo = now.add(-90, 'days').valueOf(),
             dateBegins = ninetyDaysAgo;
 
+        console.log("Vivek** build-data process, dependencies = ", dependencies);
         db.lastRequest.where('[type+id]').equals(['build-data', componentId]).first().then(processLastRequestResponse);
+        if (dependencies.hasOwnProperty('component2Id')){ 
+            var component2Id = dependencies['component2Id'];
+            for (var i = 0; i < component2Id.length; i++) {
+                db.lastRequest.where('[type+id]').equals(['build-data', component2Id[i]]).first().then(processLastRequestResponse);
+            }
+        }
 
         function processLastRequestResponse(lastRequest) {
             // if we already have made a request, just get the delta
@@ -139,6 +146,7 @@
                     }
                 });
 
+                //console.log("**Vivek** product build-data, successRateData = ", successRateData);
                 var successRateResponse = regression('linear', successRateData),
                     successRateTrendUp = successRateResponse.equation[0] > 0,
                     totalSuccessfulBuilds = _(rows).filter({success:true}).value().length,
@@ -153,8 +161,8 @@
                     summary: {
                         buildSuccess: {
                             number: Math.round(successRateAverage * 100),
-                            trendUp: successRateTrendUp,
-                            successState: successRateTrendUp
+                            trendUp: successRateAverage == 1 ? true : successRateTrendUp,
+                            successState: successRateAverage == 1 ? true : successRateTrendUp
                         }
                     },
                     latestBuild: {

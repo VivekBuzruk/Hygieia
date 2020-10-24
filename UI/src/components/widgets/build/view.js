@@ -26,7 +26,7 @@
             showArea: true,
             lineSmooth: false,
             fullWidth: true,
-            chartPadding: 7,
+            chartPadding: 10,
             axisX: {
                 showLabel: false
             },

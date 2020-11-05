@@ -4,10 +4,10 @@
 .repo-view {
     .commit-view{
         .ct-series-a .ct-line {
-            stroke: #04eeff;
+            stroke: navy;
         }
         .ct-series-b .ct-line {
-            stroke: #04eb0f;
+            stroke: darkgreen;
         }
         .ct-series-c .ct-line {
             stroke: red;
@@ -18,14 +18,14 @@
         @dash-chart-alt-color:    contrast('blue');
 
         td {
-            .text-lg;
+            .text-md;
             vertical-align: top;
             text-align: center;
             width: 20%;
-            padding: .1rem .1rem;
+            padding: .5rem .1rem .2rem .1rem;
 
             &:first-child {
-                .text-standard;
+                .text-standard-2;
                 text-align: left;
                 width: 40%;
             }
@@ -36,7 +36,7 @@
         }
 
         tr:last-of-type td {
-            .text-standard;
+            .text-standard-2;
             background: none;
             vertical-align: top;
             &:not(:first-child) {

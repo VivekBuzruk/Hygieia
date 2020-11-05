@@ -125,10 +125,23 @@
                 if (dashboards.hasOwnProperty(ix)) {
                     var dashboard = dashboards[ix];
                     // console.log("**Vivek** dashboard admin, processAppsInDashboards dashboard = ", dashboard);
-                    ctrl.apps.push({"appName" : dashboard.appName, "dashboardName" : dashboard.name, 
+                    ctrl.apps.push({"appName" : dashboard.appName, 
+                                    "dashboardType" : dashboard.type,
+                                    "dashboardName" : dashboard.name, 
                                     "dashboardId" : dashboard.id});
                 }
             }
+            function compare( a, b ) {
+                if ( a.appName < b.appName ){
+                  return -1;
+                }
+                if ( a.appName > b.appName ){
+                  return 1;
+                }
+                return 0;
+            }
+              
+            ctrl.apps.sort( compare );
         }
 
         function processDashboardResponse(data) {
@@ -145,9 +158,6 @@
         function getPageSize() {
             return paginationWrapperService.getPageSize();
         }
-
-
-
 
         // request dashboards
         userData.getAllUsers().then(processUserResponse);

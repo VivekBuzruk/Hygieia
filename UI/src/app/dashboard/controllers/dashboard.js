@@ -24,8 +24,10 @@
 
         // public variables
         var dashboardTemplate = dashboard.template.toLowerCase();
-        if (dashboardTemplate == 'capone' || dashboardTemplate == 'stech_multi_1' || dashboardTemplate == 'stech_multi_2' || 
-            dashboardTemplate == 'product-dashboard' || dashboardTemplate == 'caponechatops' || 
+        if (dashboardTemplate == 'capone' || dashboardTemplate == 'stech_capone_1' ||
+            dashboardTemplate == 'stech_multi_1' || dashboardTemplate == 'stech_multi_2' || 
+            dashboardTemplate == 'product-dashboard' || dashboardTemplate == 'application-dashboard' || 
+            dashboardTemplate == 'caponechatops' || 
             dashboardTemplate == 'cloud' || dashboardTemplate == 'splitview') {
             ctrl.templateUrl = 'components/templates/' + dashboardTemplate + '.html';
         }

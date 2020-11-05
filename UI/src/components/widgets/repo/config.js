@@ -18,12 +18,13 @@
 
 		function processCollectorsResponse(data) {
 			ctrl.collectors = data;
+			var lastChar = widgetConfig.options.id.substr(widgetConfig.options.id.length - 1);
 
 			ctrl.repoOptions =[];
 			_(data).forEach(function (collector) {
 				ctrl.repoOptions.push({name:collector.name,value:collector.name});
 			});
-			var collector = modalData.dashboard.application.components[0].collectorItems.SCM;
+			var collector = modalData.dashboard.application.components[lastChar].collectorItems.SCM;
 			var collectorId = (collector!=null && collector[0].collector!=null)? collector[0].collector.id: null;
 			if(collectorId!=null){
                 collectorData.collectorsById(collectorId).then(function(response){
@@ -211,12 +212,13 @@
 		}
 
 		function processCollectorItemResponse(response) {
+			var lastChar = widgetConfig.options.id.substr(widgetConfig.options.id.length - 1);
 			var postObj = {
 				name : "repo",
 				options:{
 					id: widgetConfig.options.id
 				},
-				componentId : modalData.dashboard.application.components[0].id,
+				componentId : modalData.dashboard.application.components[lastChar].id,
 				collectorItemId : response.data.id
 			};
 			// pass this new config to the modal closing so it's saved

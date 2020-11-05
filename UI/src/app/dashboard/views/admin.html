@@ -11,7 +11,8 @@
         <li role="presentation" ng-class="{active:tab === 'configurations'}"><a href ng-click="navigateToTab('configurations')">General Configurations</a></li>
         <li role="presentation" ng-class="{active:tab === 'auditconfig'}"><a href ng-click="navigateToTab('auditconfig')">Audit Configurations</a></li>
           <li role="presentation" ng-class="{active:tab === 'featureflags'}"><a href ng-click="navigateToTab('featureflags')">Feature Flags</a></li>
-      </ul>
+          <li role="presentation" ng-class="{active:tab === 'applications'}"><a href ng-click="navigateToTab('applications')">Applications & Dashboards</a></li>
+        </ul>
     </div>
 
     <div class="container-fluid">
@@ -69,13 +70,49 @@
               </div>
             </div>
 
-            <div ng-show="tab === 'templates'">
+            <div ng-show="tab === 'applications'">
+                <div class="widget-modal">
+                    <div class="widget-modal-heading">
+                        Dashboard Applications
+                    </div>                            
+                    <div class="row widget-appmodal-heading">
+                        <div class="col-xs-4" style="text-align:left">
+                            <h3>Application</h3>
+                        </div>
+                        <div class="col-xs-3" style="text-align:left">
+                            <h3>Dashboard Type</h3>
+                        </div>
+                        <div class="col-xs-4 col-xs-push-1" style="text-align:left">
+                            <h3>Dashboard</h3>
+                        </div>
+                    </div>
+                    <div class="widget-modal-body">
+                        <div class="row">
+                                <div class="dash-modal-row delete-dashboard-row clearfix"
+                                    ng-repeat="item in ctrl.apps track by $index">
+                                    <div title="{{item.appName}}" >
+                                    <span class="col-xs-4" style="text-align:left">{{item.appName |  trunText:30}}</span>
+                                    <span class="col-xs-3" style="text-align:left">{{item.dashboardType |  trunText:30}}</span>
+                                                                        <!-- ng-click="ctrl.openDashboard(item.dashboardId)"> -->
+                                    <a class="col-xs-4 col-xs-push-1" style="text-align:left" target="_blank" rel="noopener noreferrer" ng-href="{{ctrl.dashboardPath(item.dashboardId)}}">
+                                        {{item.dashboardName |  trunText:30}}</a>
+                                    </div>
+                                </div>
+                            <br/>
+                            <div class="text-center" ng-show="ctrl.apps && ctrl.apps.length == 0">
+                                    No results
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  
+              <div ng-show="tab === 'templates'">
                 <div class="widget-modal">
                     <div class="widget-modal-heading">
                         Manage Templates
                     </div>
                     <div class="widget-modal-body">
-
                         <div class="row gap">
                             <div class="col-sm-4 col-sm-push-8 text-center">
                                 <div>
@@ -425,9 +462,6 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 

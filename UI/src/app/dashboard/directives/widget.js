@@ -42,6 +42,7 @@
         function link(scope, element, attrs, containerController) {
             // make it so name is not case sensitive
             attrs.name = attrs.name.toLowerCase();
+            console.log('**Vivek** widget (Directive) link, attrs = ', attrs);
 
             scope.$widgetEl = element;
             scope.container = containerController;
@@ -62,6 +63,8 @@
                 // make sure widget has access to dashboard and config
                 scope.dashboard = dashboard;
                 scope.widgetConfig = widgetConfig;
+
+                console.log('**Vivek** widget (Directive) processWidget, widgetConfig = ', widgetConfig);
 
                 // when the widget registers and sets a 'getState' method use that
                 // instead of the default logic to determine whether the widget should be loaded
@@ -112,11 +115,13 @@
             $scope.setState = setState;
             $scope.init = init;
             $scope.getWidgetScore = getWidgetScore;
+            console.log('**Vivek** In widget controller, Called **');
 
             // method implementations
             function configModal() {
                 // load up a modal in the context of the settings defined in
                 // the config property when the widget was registered
+                console.log('**Vivek** In widget configModal, Called **');
                 var modalConfig = angular.extend({
                 	controllerAs: 'ctrl',
                     resolve: {
@@ -128,7 +133,9 @@
                         }
                     }
                 }, $scope.widgetDefinition.config);
+                console.log('**Vivek** In widget configModal, modalConfig =');
 
+                console.log(modalConfig);
                 // when the widget closes if an object is passed we'll assume it's an updated
                 // widget configuration so try and send it to the api or update the existing one
                 $uibModal.open(modalConfig).result.then(upsertWidget);
@@ -141,11 +148,20 @@
             }
 
             function upsertWidget(newWidgetConfig) {
+                console.log('**Vivek** In widget upsertWidget, Called **');
                 if (newWidgetConfig) {
                     // use existing values if they're not defined
-                    angular.extend($scope.widgetConfig, newWidgetConfig);
-
-                    // support single value or array values for collectorItemId
+                    if ($scope.widgetConfig) {
+                        console.log('**Vivek** In widget upsertWidget, widgetConfig = ');
+                        console.log($scope.widgetConfig);
+                    }
+                    
+                    console.log('**Vivek** In widget upsertWidget, newWidgetConfig = ');
+                    console.log(newWidgetConfig );
+                  angular.extend($scope.widgetConfig, newWidgetConfig);
+                  console.log('**Vivek** In widget upsertWidget, widgetConfig extended = ');
+                  console.log($scope.widgetConfig);
+             // support single value or array values for collectorItemId
                     if ($scope.widgetConfig.collectorItemId) {
                         $scope.widgetConfig.collectorItemIds = [$scope.widgetConfig.collectorItemId];
                         delete $scope.widgetConfig.collectorItemId;
@@ -162,7 +178,11 @@
                             // add or update the widget from the response.
                             // required when a new widget id is created
                             if(response.widget !== null && typeof response.widget === 'object') {
+                                console.log('**Vivek** In widget upsertWidget, response.widget = ');
+                                console.log(response.widget );
                                 angular.extend($scope.widgetConfig, response.widget);
+                                console.log('**Vivek** In widget upsertWidget, widgetConfig = ');
+                                console.log($scope.widgetConfig );
                             }
 
                             // save the widget locally
@@ -190,6 +210,7 @@
                 if ($scope.state !== WidgetState.READY) {
                     return;
                 }
+                console.log('**Vivek** In widget init');
 
                 // grab values from the registered configuration
                 var templateUrl = $scope.widgetDefinition.view.templateUrl;

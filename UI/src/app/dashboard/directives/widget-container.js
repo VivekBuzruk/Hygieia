@@ -26,7 +26,7 @@
             if (!$scope.dashboard) {
                 throw new Error('dashboard not accessible by widget-container directive');
             }
-
+            console.log('**Vivek** widgetContainer controller ');
             // keep track of the various types of widgets
             $scope.placeholders = [];
             $scope.registeredWidgets = {};
@@ -48,7 +48,7 @@
                 if(!widget.attrs.name) {
                     throw new Error('Widget name not defined');
                 }
-
+                console.log('**Vivek** widgetContainer registerWidget, widget = ' + widget.attrs.name);
                 var name = widget.attrs.name = widget.attrs.name.toLowerCase();
 
                 if(!$scope.registeredWidgets[name]) {
@@ -63,7 +63,15 @@
                  * and configuring widgets out of order in a layout.
                  * Maybe adding a placeholder index to the widget
                  */
-                var widgetId = name + ($scope.registeredWidgets[name].length - 1);
+                var widgetNum = ($scope.registeredWidgets[name].length - 1);
+                var widgetId = name + widgetNum;
+                if (widget.attrs["widgetIndex"]) {
+                    console.log('**Vivek** widgetContainer registerWidget, WidgetNum = ' + widgetNum +
+                                 ', widget index = ' + widget.attrs["widgetIndex"]);
+                    if (widgetNum !== widget.attrs["widgetIndex"]) {
+                        widgetId = name + widget.attrs["widgetIndex"];
+                    }
+                }
                 var foundConfig = {options: {id: widgetId}};
                 var configInDashboard = false;
 
@@ -73,11 +81,13 @@
                         // process widget with the config object
                         foundConfig = config;
                         configInDashboard = true;
+                        console.log('**Vivek** widgetContainer registerWidget, id = ' + widgetId);
                     }
                 });
 
-                if (widget.callback) {
+                if (widget.callback) { // widget -> processWidget
                     $scope.processedWidgetNames.push(widgetId);
+                    // console.log('**Vivek** widgetContainer registerWidget, callback = ' + widget.callback);
                     widget.callback(configInDashboard, foundConfig, $scope.dashboard);
                 }
             }
@@ -94,11 +104,22 @@
                 _($scope.dashboard.application.components).forEach(function (component, idx) {
                     if(component.id == newComponent.id) {
                         foundComponent = true;
+                        console.log('**Vivek** In widgetContainer upsertComponent, component = ', component);
+                        console.log('**Vivek** In widgetContainer upsertComponent, newComponent = ', newComponent);
                         $scope.dashboard.application.components[idx] = newComponent;
+                        // var buildCollector = modalData.dashboard.application.components[0].collectorItems.Build,
+                        // savedCollectorBuildJob = buildCollector ? buildCollector[0].description : null;
+                         
+                        // if(!savedCollectorBuildJob) {
+                        //     $scope.dashboard.application.components[idx] = newComponent;
+                        // } else if (savedCollectorBuildJob !== newComponent.collectorItems.Build[0].description) {
+                            
+                        // }
                     }
                 });
 
                 if(!foundComponent) {
+                    console.log('**Vivek** In widgetContainer upsertComponent, component not found = ', newComponent);
                     $scope.dashboard.application.components.push(newComponent);
                 }
             }
@@ -112,13 +133,14 @@
                         return config.options.id === newConfig.options.id;
                     }).forEach(function (config, idx) {
                         foundMatch = true;
-
+                        console.log('**Vivek** In widgetContainer upsertWidget, foundMatch config updated = ', config);                       
                         $scope.dashboard.widgets[idx] = angular.extend(config, newConfig);
                     });
-
+                console.log('**Vivek** In widgetContainer upsertWidget, newConfig = ', newConfig);
                 if(!foundMatch) {
                     $scope.dashboard.widgets.push(newConfig);
                 }
+                console.log('**Vivek** In widgetContainer upsertWidget, dashboard.widgets = ', dashboard.widgets);                
             }
         }
 
@@ -129,7 +151,7 @@
             if ($scope.placeholders.length === 0) {
                 return;
             }
-
+            console.log('**Vivek** widgetContainer Link');
             _($scope.dashboard.widgets)
                 .filter(function (widget) {
                     return $scope.processedWidgetNames.indexOf(widget.options.id) == -1;
@@ -137,7 +159,7 @@
                 .forEach(function (item, idx) {
                     var remainder = idx % $scope.placeholders.length;
                     var widget = $scope.dashboard.widgets[idx];
-
+                    console.log('**Vivek** widgetContainer Link, Linked ' + widget.name);
                     var el = $compile('<widget name="' + widget.name + '"></widget>')($scope);
 
                     $scope.placeholders[remainder].element.append(el);

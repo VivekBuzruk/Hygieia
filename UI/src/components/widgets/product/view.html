@@ -187,6 +187,7 @@
 
             <div
                 class="product-table-tr new-team-row"
+                ng-if="ctrl.autoLoadTeams == false"
                 ng-class="{'no-teams': !ctrl.configuredTeams.length}"
                 ng-click="ctrl.addTeam()"
                 ng-show="hasPermission()">

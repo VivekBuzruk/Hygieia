@@ -135,6 +135,20 @@
     white-space: nowrap;
 }
 
+.text-standard-2 {
+    .text(@dash-text-standard2-size, @dash-text-standard2-line-height);
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.text-standard-md {
+    .text(@dash-text-standard-size, @dash-text-standard-line-height);
+    font-weight: 600;
+    letter-spacing: .1rem;
+}
+
 .text-standard-lg {
     .text(1.7, 2.25);
 }
@@ -146,6 +160,10 @@
 
 .text-lg {
     .text(1.7, 2.25);
+}
+
+.text-md {
+    .text(1.2, 1.65);
 }
 
 .text-1x {

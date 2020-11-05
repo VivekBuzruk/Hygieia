@@ -37,6 +37,8 @@
         ctrl.editToken = editToken;
 
         ctrl.pageChangeHandler = pageChangeHandler;
+        ctrl.openDashboard = openDashboard;
+        ctrl.dashboardPath = dashboardPath;
         ctrl.currentPage = currentPage;
         ctrl.pageSize = pageSize;
         ctrl.getPageSize = getPageSize;
@@ -78,7 +80,7 @@
         }
 
         // ctrl.dashboards = []; don't default since it's used to determine loading
-
+        // ctrl.apps = [];
         // public methods
         ctrl.deleteDashboard = deleteDashboard;
         ctrl.applyTheme = applyTheme;
@@ -105,20 +107,57 @@
 
         }
 
+        function openDashboard(dashboardId) {
+                $location.path('/dashboard/' + dashboardId);
+        }
+
+        function dashboardPath(dashboardId) {
+            return '#/dashboard/' + dashboardId;
+        }
+
+        function processAppsInDashboards(dashboards) {
+            ctrl.apps = [];
+            // console.log("**Vivek** admin, getApps = ", dashboards);
+            if (!dashboards || dashboards.length == 0) {
+                return;
+            }
+            for (var ix in dashboards) {
+                if (dashboards.hasOwnProperty(ix)) {
+                    var dashboard = dashboards[ix];
+                    // console.log("**Vivek** dashboard admin, processAppsInDashboards dashboard = ", dashboard);
+                    ctrl.apps.push({"appName" : dashboard.appName, 
+                                    "dashboardType" : dashboard.type,
+                                    "dashboardName" : dashboard.name, 
+                                    "dashboardId" : dashboard.id});
+                }
+            }
+            function compare( a, b ) {
+                if ( a.appName < b.appName ){
+                  return -1;
+                }
+                if ( a.appName > b.appName ){
+                  return 1;
+                }
+                return 0;
+            }
+              
+            ctrl.apps.sort( compare );
+        }
+
         function processDashboardResponse(data) {
             ctrl.dashboards = paginationWrapperService.processDashboardResponse(data, ctrl.dashboardType);
+            processAppsInDashboards(ctrl.dashboards);
+            //console.log("**Vivek** dashboard admin, processDashboardResponse ctrl.apps = ", ctrl.apps);
         }
 
         function processDashboardError(data) {
             ctrl.dashboards = paginationWrapperService.processDashboardError(data);
+            processAppsInDashboards(ctrl.dashboards);
         }
 
         function getPageSize() {
             return paginationWrapperService.getPageSize();
         }
-
-
-
 
         // request dashboards
         userData.getAllUsers().then(processUserResponse);
@@ -132,6 +171,7 @@
             paginationWrapperService.pageChangeHandler(pageNumber)
                 .then(function() {
                     ctrl.dashboards = paginationWrapperService.getDashboards();
+                    processAppsInDashboards(ctrl.dashboards);
                 });
         }
 
@@ -300,6 +340,7 @@
 
         function processResponse(data) {
             ctrl.dashboards = paginationWrapperService.processDashboardResponse({"data" : data});
+            processAppsInDashboards(ctrl.dashboards);
         }
 
         function processUserResponse(response) {
@@ -505,7 +546,7 @@
             var promises = paginationWrapperService.filterByTitle(title, ctrl.dashboardType);
             $q.all(promises).then (function() {
                 ctrl.dashboards = paginationWrapperService.getDashboards();
-
+                processAppsInDashboards(ctrl.dashboards);
             });
         }
 

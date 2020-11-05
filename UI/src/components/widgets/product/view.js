@@ -10,8 +10,8 @@
         }});
 
 
-    productViewController.$inject = ['$scope', '$document', '$uibModal', '$location', '$q', '$stateParams', '$timeout', 'buildData', 'codeAnalysisData', 'collectorData', 'dashboardData', 'pipelineData', 'testSuiteData', 'productBuildData', 'productCodeAnalysisData', 'productCommitData', 'productSecurityAnalysisData', 'productTestSuiteData', 'cicdGatesData'];
-    function productViewController($scope, $document, $uibModal, $location, $q, $stateParams, $timeout, buildData, codeAnalysisData, collectorData, dashboardData, pipelineData, testSuiteData, productBuildData, productCodeAnalysisData, productCommitData, productSecurityAnalysisData, productTestSuiteData, cicdGatesData) {
+    productViewController.$inject = ['$scope', '$document', '$uibModal', '$location', '$q', '$stateParams', '$timeout', 'buildData', 'codeAnalysisData', 'collectorData', 'dashboardData', 'pipelineData', 'testSuiteData', 'productBuildData', 'productCodeAnalysisData', 'productCommitData', 'productSecurityAnalysisData', 'productTestSuiteData', 'cicdGatesData', 'paginationWrapperService'];
+    function productViewController($scope, $document, $uibModal, $location, $q, $stateParams, $timeout, buildData, codeAnalysisData, collectorData, dashboardData, pipelineData, testSuiteData, productBuildData, productCodeAnalysisData, productCommitData, productSecurityAnalysisData, productTestSuiteData, cicdGatesData, paginationWrapperService) {
         /*jshint validthis:true */
         var ctrl = this;
 
@@ -70,6 +70,8 @@
         var teamDashboardDetails = {},
             isReload = null;
 
+        console.log('**Vivek** product view controller: ', $scope);
+
         // set our data before we get things started
         var widgetOptions = angular.copy($scope.widgetConfig.options);
 
@@ -80,6 +82,7 @@
         ctrl.teamCrlStages = {};
         ctrl.prodStages={};
         ctrl.orderedStages = {};
+        ctrl.autoLoadTeams = false;
 
         // pull all the stages from pipeline. Create a map for all ctrl stages for each team.
         ctrl.load = function() {
@@ -204,6 +207,109 @@
             });
         }
 
+        if ($scope.dashboard.template && $scope.dashboard.template == "application-dashboard") {
+            ctrl.autoLoadTeams = true;
+            dashboardData.search().then(addMyTeams);
+        }
+
+        function processAppsInDashboards(dashboards) {
+            ctrl.apps = [];
+            var dashFound = false;
+            // console.log("**Vivek** components widgets product view, processAppsInDashboards = ", dashboards);
+            if (!dashboards || dashboards.length == 0) {
+                return dashFound;
+            }
+            for (var ix in dashboards) {
+                if (dashboards.hasOwnProperty(ix)) {
+                    var dashboard = dashboards[ix];
+                    if (dashboard.type !== 'Team') {
+                        continue;
+                    }
+                    // console.log("**Vivek** components widgets product view,  processAppsInDashboards dashboard = ", dashboard);
+                    if (dashboard.appName == $scope.dashboard.application.name) {
+                        console.log("**Vivek** components widgets product view, processAppsInDashboards dashboard = ", dashboard);
+                        ctrl.apps.push({"appName" : dashboard.appName, "dashboardName" : dashboard.name,
+                                        "dashboardId" : dashboard.id});
+                        dashFound = true;
+                    }
+                }
+            }
+            return dashFound;
+        }
+
+        function addAppWidgets(apps) {
+            // prepare our response for the widget upsert
+            var options = $scope.widgetConfig.options;
+
+            // make sure it's an array
+            if (!options.teams || !options.teams.length) {
+                options.teams = [];
+            } else {
+                return false;
+            }
+        // init
+            collectorData.itemsByType('product').then(function(result) {
+
+                // limit to team dashboards
+                var boards = [];
+
+                _(result).forEach(function(item) {
+                    console.log("**Vivek** components product addAppWidgets, item = ", item);
+                    if(item.description) {
+                        boards.push({
+                            id: item.id,
+                            title: item.description,
+                            dashboardId: item.options.dashboardId
+                        });
+                    }
+                });
+
+                ctrl.myDashboards = boards;
+                for (var index = 0; index < ctrl.apps.length; index++) {
+                    console.log("**Vivek** component widgets product view, Selected App ", ctrl.apps[index]);
+                    // get team dashboard details and see if build and commit widgets are available
+                    var dashId = ctrl.apps[index].dashboardId;
+
+                    dashboardData.detail(dashId).then(function (resultDash) {
+                        var res = resultDash;
+                        var thisDashId = resultDash.id;
+                        var buildInd = false;
+                        var repoInd = false;
+                        var myCollectorItemId = false;
+                        var widgets = [];    
+
+                        widgets = resultDash.widgets;
+                        _(widgets).forEach(function (widget) {
+                            if (widget.name == "build") buildInd = true;
+                            if (widget.name == "repo") repoInd = true;
+
+                        });
+                        for (var index2 = 0; index2 < ctrl.myDashboards.length; index2++) {
+                            if (ctrl.myDashboards[index2].dashboardId == thisDashId) {
+                                myCollectorItemId = ctrl.myDashboards[index2].id;
+                                break;
+                            }
+                        }    
+                        var config = {
+                            collectorItemId: myCollectorItemId,
+                            name: resultDash.title,
+                            customName: resultDash.application.name,
+                            dashBoardId: thisDashId
+                        };
+                        options.teams.push(config);
+                        updateWidgetOptions(options);
+                    });
+                }
+            });
+        }
+
+        function addMyTeams(data) {
+            console.log("**Vivek** product addMyTeams ");
+            ctrl.dashboards = paginationWrapperService.processDashboardResponse({"data" : data});
+            processAppsInDashboards(ctrl.dashboards); // Use of ==> const myPromise = (new Promise( ** will be better
+            addAppWidgets(ctrl.apps);
+        }
+
         function addTeam() {
             $uibModal.open({
                 templateUrl: 'components/widgets/product/add-team/add-team.html',
@@ -225,7 +331,7 @@
                 var itemInd = false;
 
                 // iterate over teams and set itemInd to true if team is already added to prod dashboard.
-                for(var i=0;i<options.teams.length;i++){
+                for(var i=0;i < options.teams.length;i++){
                     if(options.teams[i].collectorItemId == config.collectorItemId){
                         itemInd = true; break;
                     }
@@ -252,6 +358,9 @@
                     }else{
                         // add our new config to the array
                         options.teams.push(config);
+
+                        console.log("**Vivek** components widgets product view, addTeam config = ", config);
+                        console.log("**Vivek** components widgets product view, addTeam options = ", options);
 
                         updateWidgetOptions(options);
                     }
@@ -495,6 +604,7 @@
                 options: options
             };
 
+            console.log("**Vivek** product view, updateWidgetOptions data = ", data);
             $scope.upsertWidget(data);
         }
 
@@ -508,12 +618,26 @@
             var team = teamDashboardDetails[collectorItemId],
                 componentId = team.application.components[0].id;
 
+            console.log("**Vivek** product view, getTeamComponentData team = ", team);
+
             function getCaMetric(metrics, name, fallback) {
                 var val = fallback === undefined ? false : fallback;
                 _(metrics).filter({name:name}).forEach(function(item) {
                     val = item.value || parseFloat(item.formattedValue);
                 });
                 return val;
+            }
+            function getMyComponentId(widgetName) {
+                var component2Id = []
+                for (var i = 0; i < team.application.components.length; i++) {
+                    for (var j = 0; j < team.widgets.length; j++) {
+                        if ( team.widgets[j].name == widgetName && team.application.components[i].id == team.widgets[j].componentId) {
+                            component2Id.push(team.application.components[i].id); 
+                            break;
+                        }
+                    }
+                }
+                return component2Id;
             }
 
             var processDependencyObject = {
@@ -524,14 +648,27 @@
                 cleanseData: cleanseData,
                 isReload: isReload,
                 $timeout: $timeout,
-                $q: $q
+                $q: $q,
+                component2Id:[]
             };
+            //console.log("**Vivek** product view, getTeamComponentData processDependencyObject = ", processDependencyObject);
 
             // request and process our data
-            productBuildData.process(angular.extend(processDependencyObject, { buildData: buildData }));
+            processDependencyObject.component2Id = getMyComponentId('codeanalysis');
+            if (processDependencyObject.component2Id.length > 0) {
+                processDependencyObject.componentId = processDependencyObject.component2Id[processDependencyObject.component2Id.length - 1];
+                processDependencyObject.component2Id.pop();
+            }
             productSecurityAnalysisData.process(angular.extend(processDependencyObject, { codeAnalysisData: codeAnalysisData, getCaMetric: getCaMetric }));
             productCodeAnalysisData.process(angular.extend(processDependencyObject, { codeAnalysisData: codeAnalysisData, getCaMetric: getCaMetric }));
             productTestSuiteData.process(angular.extend(processDependencyObject, { testSuiteData: testSuiteData }));
+
+            processDependencyObject.component2Id = getMyComponentId('build');
+            if (processDependencyObject.component2Id.length > 0) {
+                processDependencyObject.componentId = processDependencyObject.component2Id[processDependencyObject.component2Id.length - 1];
+                processDependencyObject.component2Id.pop();
+            }
+            productBuildData.process(angular.extend(processDependencyObject, { buildData: buildData }));
         }
 
         function collectTeamStageData(teams, teamCtrlStages) {

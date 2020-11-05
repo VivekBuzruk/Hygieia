@@ -115,6 +115,7 @@
 
         // creates a new dashboard
         function create(data) {
+            console.log("**Vivek** dashboard-data create, Dashboard creation Data = ", data);
             return $http.post(dashboardRoute, data)
                 .success(function (response) {
                     return response.data;
@@ -127,7 +128,7 @@
         // renames a dashboard
 
         function renameDashboard(id,newDashboardName){
-            console.log("In data renaming dashboard");
+            console.log("**Info** In data renaming dashboard");
             var postData= {
                 title: newDashboardName
              }
@@ -169,7 +170,7 @@
             // create a copy so we don't modify the original
             widget = angular.copy(widget);
 
-            console.log('New Widget Config', widget);
+            console.log('**Info** dashboard-data upsertwidget, Widget Config', widget);
 
             var widgetId = widget.id;
 
@@ -210,7 +211,7 @@
         // can be used to delete existing widget
         function deleteWidget(dashboardId, widget) {
             widget = angular.copy(widget);
-            console.log('Delete widget config', widget);
+            console.log('**Info** Delete widget config', widget);
             var widgetId = widget.id;
             if (widgetId) {
                 // remove the id since that would cause an api failure

@@ -1,6 +1,6 @@
 <div ng-controller="StechCapOneTemplateController as template">
     <div id="header">
-        <nav class="navbar navbar-default navbar-fixed-top">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
 
                 <a ng-href="#/" class="dashboard-logo"></a>
@@ -25,68 +25,28 @@
             <score-view-header dashboard-id="{{ctrl.dashboard.id}}" rate-it-options="ctrl.scoreRateItOptionsHeader"></score-view-header>
         </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="row">
                     <div class="col-xs-12">
                         <div ng-if="ctrl.scoreWidgetEnabled">
                             <score-view-widget dashboard-id="{{ctrl.dashboard.id}}" rate-it-options="ctrl.scoreRateItOptionsWidget"></score-view-widget>
                         </div>
                         <widget name="build" widget-title="Build"></widget>
-
-                        <div class="container-fluid">
-                            <ul class="nav nav-tabs">
-                                <li class="text-lg auth-modal-tab" ng-repeat="tab in template.miniFeaturetabs" ng-click="template.miniFeatureToggleView($index)"
-                                    ng-class="tab.name == template.miniFeatureWidgetView ? 'active' : ''">
-                                    <a class="textColor-Performance" data-toggle="tab" >{{tab.name}}</a>
-                                </li>
-                                </span>
-                            </ul>
-        
-                        </div>
-        
-                        <div class="container-fluid" widget-container dashboard="ctrl.dashboard" ng-if="template.miniFeatureWidgetView == 'Feature'">
-                                    <widget name="feature" widget-title="Feature"></widget>
-                        </div>
-        
-                        <div class="container-fluid" widget-container dashboard="ctrl.dashboard" ng-if="template.miniFeatureWidgetView == 'Team'">
-                                    <widget name="team" widget-title="Team"></widget>
-                        </div>
-                        <widget name="feature" widget-title=""></widget>
+                        <widget name="feature" widget-title="Feature"></widget>
                     </div>
                 </div>
              </div>
 
-            <div class="col-md-6">
-                <div class="container-fluid">
-                    <ul class="nav nav-tabs">
-                        <li class="text-lg auth-modal-tab" ng-repeat="tab in template.minitabs" ng-click="template.miniToggleView($index)"
-                            ng-class="tab.name == template.miniWidgetView ? 'active' : ''">
-                            <a class="textColor-Performance" data-toggle="tab" >{{tab.name}}</a>
-                        </li>
-                        </span>
-                    </ul>
-
-                </div>
-
-                <div class="container-fluid" widget-container dashboard="ctrl.dashboard" ng-if="template.miniWidgetView == 'Quality'">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <widget name="codeanalysis" widget-title="Quality"></widget>
-                        </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <widget name="codeanalysis" widget-title="Code Analysis"></widget>
+                        <widget name="Monitor" widget-title="Monitor"></widget>
                     </div>
                 </div>
-
-                <div class="container-fluid" widget-container dashboard="ctrl.dashboard" ng-if="template.miniWidgetView == 'Performance'">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <widget name="Performance" widget-title="Performance"></widget>
-                        </div>
-                    </div>
-                </div>
-                <widget name="Monitor"></widget>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="row">
                     <div class="col-sm-6 col-md-12">
                         <widget name="repo"></widget>

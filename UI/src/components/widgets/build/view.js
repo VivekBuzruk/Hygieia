@@ -26,7 +26,7 @@
             showArea: true,
             lineSmooth: false,
             fullWidth: true,
-            chartPadding: 10,
+            chartPadding: 5,  // was 10
             axisX: {
                 showLabel: false
             },
@@ -46,7 +46,7 @@
                 Chartist.plugins.gridBoundaries(),
                 Chartist.plugins.tooltip(),
                 Chartist.plugins.axisLabels({
-                    stretchFactor: 1.4,
+                    stretchFactor: 1.2,
                     axisX: {
                         labels: [
                             moment().subtract(14, 'days').format('MMM DD'),
@@ -59,7 +59,7 @@
             stackBars: true,
             centerLabels: true,
             axisY: {
-                offset: 30,
+                offset: 20,
                 labelInterpolationFnc: function(value) {
                     return value === 0 ? 0 : ((Math.round(value * 100) / 100) + '');
                 }
@@ -94,7 +94,7 @@
                 templateUrl: 'components/widgets/build/detail.html',
                 controller: 'BuildWidgetDetailController',
                 controllerAs: 'detail',
-                size: 'lg',
+                size: 'md',
                 resolve: {
                     build: function() {
                         return _.find(builds, { number: build.number });

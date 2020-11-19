@@ -23,7 +23,7 @@
                                 ng-show="ctrl.numberOfSprintTypes === 2" ng-click="ctrl.pauseAgileView()"
                                 ng-model="ctrl.pausePlaySymbol"><i class="fa fa-{{ctrl.pausePlaySymbol}}"></i></button>
                     </div>
-                    <div class="widget-body" fit-text=".build-summary-count > span" fit-text-max="40">
+                    <div class="widget-body" fit-text=".build-summary-count > span" fit-text-max="30">
                         <div hide-empty="['{{ ctrl.iterations[0].name }}']">
                             <div ng-repeat="iteration in ctrl.iterations">
                                 <div class="col-xs-2.5 text-lg pull-right">
@@ -166,7 +166,7 @@
                                 ng-show="ctrl.numberOfSprintTypes === 2" ng-click="ctrl.pauseAgileView()"
                                 ng-model="ctrl.pausePlaySymbol"><i class="fa fa-{{ctrl.pausePlaySymbol}}"></i></button>
                     </div>
-                    <div class="widget-body" fit-text=".build-summary-count > span" fit-text-max="40">
+                    <div class="widget-body" fit-text=".build-summary-count > span" fit-text-max="30">
                         <div hide-empty="['{{ ctrl.iterationsKanban[0] }}']">
                             <div ng-repeat="iteration in ctrl.iterationsKanban">
                                 <div class="col-xs-2.5 text-lg pull-right">

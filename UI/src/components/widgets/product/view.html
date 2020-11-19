@@ -39,8 +39,16 @@
                     </a>
 
                     <div class="team-quality">
-                        <div class="team-quality-desc" ng-click="ctrl.viewGatesDetails(team)" ng-init="ctrl.initPerc(team)">
-                          DevOps Maturity Score - <span><a href="" class="cicd-result"> {{team.passedGates}}/{{team.totalGates}}</a></span>
+                        <div ng-init="ctrl.initPerc(team)">
+                            <div class="team-quality-desc" ng-click="ctrl.viewGatesDetails(team)" ng-if="team.totalGates > 0">
+                                DevOps Maturity Score - <span><a href="" class="cicd-result">
+                                        {{team.passedGates}}/{{team.totalGates}}</a></span>
+                            </div>
+                        
+                            <div ng-if="team.totalGates == 0 && ctrl.teamDashboardId(team)">
+                                <score-view-header dashboard-id="{{ctrl.teamDashboardId(team)}}"
+                                    rate-it-options="ctrl.scoreRateItOptionsHeader"></score-view-header>
+                            </div>
                         </div>
                         <div class="team-quality-desc">
                             90-day Pipeline Health
@@ -150,7 +158,6 @@
 
                                 <div class="clearfix"></div>
                             </div>
-
                             <div class="team-data-cell-last-build" ng-if="stage === 'Build' && team.latestBuild">
                                 Latest build #: <span class="fa" ng-class="{'fa-refresh fa-spin product-text-active':team.latestBuild.inProgress, 'text-success fa-thumbs-up': !team.latestBuild.inProgress && team.latestBuild.success, 'text-danger fa-thumbs-down': !team.latestBuild.inProgress && !team.latestBuild.success}"></span> <span class="team-data-cell-last-build-num">{{team.latestBuild.number}}</span>
                             </div>

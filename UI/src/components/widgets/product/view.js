@@ -70,8 +70,6 @@
         var teamDashboardDetails = {},
             isReload = null;
 
-        console.log('**Vivek** product view controller: ', $scope);
-
         // set our data before we get things started
         var widgetOptions = angular.copy($scope.widgetConfig.options);
 
@@ -129,6 +127,7 @@
         ctrl.addTeam = addTeam;
         ctrl.editTeam = editTeam;
         ctrl.openDashboard = openDashboard;
+        ctrl.teamDashboardId = teamDashboardId;
         ctrl.viewTeamStageDetails = viewTeamStageDetails;
         ctrl.viewQualityDetails = viewQualityDetails;
         ctrl.viewGatesDetails = viewGatesDetails;
@@ -137,6 +136,23 @@
         // public data methods
         ctrl.teamStageHasCommits = teamStageHasCommits;
 
+        //Default options to use with score display in header
+        ctrl.scoreRateItOptionsHeader = {
+            readOnly : true,
+            step : 0.1,
+            starWidth : 22,
+            starHeight : 22,
+            class : "score"
+        };
+
+        //Default options to use with score display in widget
+        ctrl.scoreRateItOptionsWidget = {
+            readOnly : true,
+            step : 0.1,
+            starWidth : 40,
+            starHeight : 40,
+            class : "score"
+        };
 
         //region public methods
         function processLoad() {
@@ -215,7 +231,6 @@
         function processAppsInDashboards(dashboards) {
             ctrl.apps = [];
             var dashFound = false;
-            // console.log("**Vivek** components widgets product view, processAppsInDashboards = ", dashboards);
             if (!dashboards || dashboards.length == 0) {
                 return dashFound;
             }
@@ -225,9 +240,7 @@
                     if (dashboard.type !== 'Team') {
                         continue;
                     }
-                    // console.log("**Vivek** components widgets product view,  processAppsInDashboards dashboard = ", dashboard);
                     if (dashboard.appName == $scope.dashboard.application.name) {
-                        console.log("**Vivek** components widgets product view, processAppsInDashboards dashboard = ", dashboard);
                         ctrl.apps.push({"appName" : dashboard.appName, "dashboardName" : dashboard.name,
                                         "dashboardId" : dashboard.id});
                         dashFound = true;
@@ -254,7 +267,6 @@
                 var boards = [];
 
                 _(result).forEach(function(item) {
-                    console.log("**Vivek** components product addAppWidgets, item = ", item);
                     if(item.description) {
                         boards.push({
                             id: item.id,
@@ -266,7 +278,6 @@
 
                 ctrl.myDashboards = boards;
                 for (var index = 0; index < ctrl.apps.length; index++) {
-                    console.log("**Vivek** component widgets product view, Selected App ", ctrl.apps[index]);
                     // get team dashboard details and see if build and commit widgets are available
                     var dashId = ctrl.apps[index].dashboardId;
 
@@ -304,7 +315,6 @@
         }
 
         function addMyTeams(data) {
-            console.log("**Vivek** product addMyTeams ");
             ctrl.dashboards = paginationWrapperService.processDashboardResponse({"data" : data});
             processAppsInDashboards(ctrl.dashboards); // Use of ==> const myPromise = (new Promise( ** will be better
             addAppWidgets(ctrl.apps);
@@ -358,9 +368,6 @@
                     }else{
                         // add our new config to the array
                         options.teams.push(config);
-
-                        console.log("**Vivek** components widgets product view, addTeam config = ", config);
-                        console.log("**Vivek** components widgets product view, addTeam options = ", options);
 
                         updateWidgetOptions(options);
                     }
@@ -428,6 +435,14 @@
             }
         }
 
+        function teamDashboardId(item) {
+            var dashboardDetails = teamDashboardDetails[item.collectorItemId];
+            if(dashboardDetails) {
+                return dashboardDetails.id;
+            }
+            return false;
+        }
+
         function viewTeamStageDetails(team, stage) {
             // only show details if we have commits
             if(!teamStageHasCommits(team, stage)) {
@@ -486,6 +501,9 @@
               }
               team.passedGates = pass;
               team.totalGates = response.length;
+            }).catch (function (e) {
+                team.passedGates = 0;
+                team.totalGates = 0;
             });
           })
         };
@@ -604,7 +622,6 @@
                 options: options
             };
 
-            console.log("**Vivek** product view, updateWidgetOptions data = ", data);
             $scope.upsertWidget(data);
         }
 
@@ -617,8 +634,6 @@
         function getTeamComponentData(collectorItemId) {
             var team = teamDashboardDetails[collectorItemId],
                 componentId = team.application.components[0].id;
-
-            console.log("**Vivek** product view, getTeamComponentData team = ", team);
 
             function getCaMetric(metrics, name, fallback) {
                 var val = fallback === undefined ? false : fallback;
@@ -651,7 +666,6 @@
                 $q: $q,
                 component2Id:[]
             };
-            //console.log("**Vivek** product view, getTeamComponentData processDependencyObject = ", processDependencyObject);
 
             // request and process our data
             processDependencyObject.component2Id = getMyComponentId('codeanalysis');

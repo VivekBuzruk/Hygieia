@@ -26,6 +26,7 @@
 
         // public methods
         ctrl.createDashboard = createDashboard;
+        ctrl.createProdView = createProdView;
         ctrl.deleteDashboard = deleteDashboard;
         ctrl.manageTemplates = manageTemplates;
         ctrl.open = open;
@@ -103,6 +104,16 @@
             $uibModal.open({
                 templateUrl: 'app/dashboard/views/createDashboard.html',
                 controller: 'CreateDashboardController',
+                controllerAs: 'ctrl'
+            });
+        }
+
+        // method implementations
+        function createProdView() {
+            // open modal for creating a new dashboard
+            $uibModal.open({
+                templateUrl: 'app/dashboard/views/createProductView.html',
+                controller: 'CreateProductViewController',
                 controllerAs: 'ctrl'
             });
         }

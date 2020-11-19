@@ -132,6 +132,16 @@ var localStorageSupported = (function () {
                     templateUrl: 'app/dashboard/views/templates.html'
                 })
 
+                .state('prodSummary', {
+                    url: '/prodSummary',
+                    controller: 'ProductSummaryController as ctrl',
+                    templateUrl: 'app/dashboard/views/prodSummary.html',
+                    resolve: {
+                        dashboard: function ($stateParams, dashboardData) {
+                            return dashboardData.detail($stateParams.id);
+                        }
+                    }
+                })
         })
         .run(function ($rootScope, loginRedirectService) {
             $rootScope.$on('$locationChangeStart', function (event, nextPath, currentPath) {

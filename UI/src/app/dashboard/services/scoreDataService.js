@@ -25,6 +25,9 @@
             if (!score) {
                 return null;
             }
+            if (!widgetId) {
+                 return null;
+            }
             return _.find(score.componentMetrics, {refId: widgetId});
         }
     }

@@ -1,0 +1,40 @@
+<div ng-controller="ProductSummaryController as ctrl">
+    <div id="prodSummary" class="main-content">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <a ng-href="#/" class="dashboard-logo"></a>
+
+            <div title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</div>
+        </nav>
+        <div class="clear"></div>
+    </div>
+
+    <div class="dashboard-widgets container-fluid" widget-container >
+        <div class="row">
+            <div class="dash-modal-row delete-dashboard-row clearfix"
+                ng-repeat="item in ctrl.apps track by $index">
+                <div title="{{item.appName}}" >
+                <span class="col-xs-4" style="text-align:left">{{item.appName |  trunText:30}}</span>
+                <score-view-header dashboard-id="{{ctrl.dashboard.id}}" rate-it-options="ctrl.scoreRateItOptionsHeader"></score-view-header>
+                <span class="col-xs-3" style="text-align:left">{{item.dashboardType |  trunText:30}}</span>
+                                                    <!-- ng-click="ctrl.openDashboard(item.dashboardId)"> -->
+                <a class="col-xs-4 col-xs-push-1" style="text-align:left" target="_blank" rel="noopener noreferrer" ng-href="{{ctrl.dashboardPath(item.dashboardId)}}">
+                    {{item.dashboardName |  trunText:30}}</a>
+                </div>
+            </div>
+        <br/>
+        <div class="text-center" ng-show="ctrl.apps && ctrl.apps.length == 0">
+                No results
+        </div>
+    </div>
+
+        <div ng-if="ctrl.scoreHeaderEnabled">
+            <score-view-header dashboard-id="{{ctrl.dashboard.id}}" rate-it-options="ctrl.scoreRateItOptionsHeader"></score-view-header>
+        </div>
+    <div class="dashboard-widgets container-fluid" widget-container dashboard="ctrl.dashboard">
+        <div class="row">
+            <div class="col-xs-12">
+                <widget name="product" header="false"></widget>
+            </div>
+        </div>
+    </div>
+</div>

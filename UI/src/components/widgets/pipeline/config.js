@@ -28,7 +28,8 @@
         function processResponse(dataA) {
 
             var data = dataA[0];
-
+            console.log("**Vivek** product config, processResponse dataA = ", dataA);
+ 
             for(var x in modalData.widgetConfig.options.mappings) {
                 var envName = modalData.widgetConfig.options.mappings[x];
                 ctrl.environmentMappings.push({key: x , value: envName});

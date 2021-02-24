@@ -38,12 +38,14 @@
         // a current snapshot of data
         var collectorItemId = configuredTeam.collectorItemId;
 
+        console.log("**Vivek** product commit-data, collectorItemId = ", collectorItemId);
 
         // get our pipeline commit data. start by seeing if we've already run this request
         db.lastRequest.where('[type+id]').equals(['pipeline-commit', collectorItemId]).first().then(processLastRequestResponse);
 
         function processLastRequestResponse(lastRequest) {
             // if we already have made a request, just get the delta
+            console.log("**Vivek** product commit-data processLastRequestResponse, lastRequest = ", lastRequest);
             pipelineData
                 .commits(dateBegins, nowTimestamp, collectorItemId)
                 .then(function (response) {
@@ -105,6 +107,8 @@
                     stageDurations = {},
                     stages = [].concat(ctrlStages); // create a local copy so it doesn't get overwritten
 
+                console.log("**Vivek** product commit-data, processPipelineCommitData ctrlStages = ", stages);
+                console.log("**Vivek** product commit-data, processPipelineCommitData team.stages = ", team.stages);
                 // go backward through the stages and define commit data.
                 // reverse should make it easier to calculate time in the previous stage
                 var nextStageName = ''

@@ -77,26 +77,38 @@
                     </div>                            
                     <div class="row widget-appmodal-heading">
                         <div class="col-xs-4" style="text-align:left">
-                            <h3>Application</h3>
+                            <h4>Application</h4>
                         </div>
                         <div class="col-xs-3" style="text-align:left">
-                            <h3>Dashboard Type</h3>
+                            <h4>Dashboard Type</h4>
                         </div>
                         <div class="col-xs-4 col-xs-push-1" style="text-align:left">
-                            <h3>Dashboard</h3>
+                            <h4>Dashboard</h4>
                         </div>
                     </div>
                     <div class="widget-modal-body">
                         <div class="row">
-                                <div class="dash-modal-row delete-dashboard-row clearfix"
-                                    ng-repeat="item in ctrl.apps track by $index">
-                                    <div title="{{item.appName}}" >
-                                    <span class="col-xs-4" style="text-align:left">{{item.appName |  trunText:30}}</span>
-                                    <span class="col-xs-3" style="text-align:left">{{item.dashboardType |  trunText:30}}</span>
-                                                                        <!-- ng-click="ctrl.openDashboard(item.dashboardId)"> -->
-                                    <a class="col-xs-4 col-xs-push-1" style="text-align:left" target="_blank" rel="noopener noreferrer" ng-href="{{ctrl.dashboardPath(item.dashboardId)}}">
-                                        {{item.dashboardName |  trunText:30}}</a>
+                                <div class="list-animate">
+                                    <div class="dash-modal-row application-dashboard-row clearfix"
+                                        dir-paginate="item in ctrl.apps | itemsPerPage: ctrl.getPageSize() track by $index" 
+                                        current-page="currentPage"
+                                        total-items= ctrl.getTotalItems()
+                                        pagination-id="adminDashboard">
+                                        <div title="{{item.appName}}" >
+                                            <span class="col-xs-4" style="text-align:left">{{item.appName |  trunText:30}}</span>
+                                            <span class="col-xs-3" style="text-align:left">{{item.dashboardType |  trunText:30}}</span>
+                                                                                <!-- ng-click="ctrl.openDashboard(item.dashboardId)"> -->
+                                            <a class="col-xs-4 col-xs-push-1" style="text-align:left" target="_blank" rel="noopener noreferrer" ng-href="{{ctrl.dashboardPath(item.dashboardId)}}">
+                                                {{item.dashboardName |  trunText:30}}</a>
+                                        </div>
                                     </div>
+                                    <dir-pagination-controls
+                                          max-size="8"
+                                          boundary-links="true"
+                                         direction-links="true"
+                                          on-page-change="ctrl.pageChangeHandler(newPageNumber)"
+                                          pagination-id="adminDashboard">
+                                    </dir-pagination-controls >
                                 </div>
                             <br/>
                             <div class="text-center" ng-show="ctrl.apps && ctrl.apps.length == 0">

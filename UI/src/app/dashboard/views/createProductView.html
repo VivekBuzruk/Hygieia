@@ -1,0 +1,19 @@
+<widget-modal widget-modal-title="Create a Product View">
+    <form name="cdf" class="form" ng-submit="ctrl.submit(cdf)" novalidate>
+
+        <form-group input="selectedDashboard" errors="{required: 'Please select a Dashboard'}">
+            <select name="selectedDashboard"
+                        class="form-control"
+                        ng-model="ctrl.selectedDashboard"
+                        ng-options="item.name for item in ctrl.prodDash track by item.id"
+                        required>
+                    <option value="" disabled>Select a Product Dashboard</option>
+            </select>
+        </form-group>
+
+        <div class="button-row row text-center">
+            <button type="submit" class="btn btn-primary btn-wide">Create</button>
+        </div>
+
+    </form>
+</widget-modal>

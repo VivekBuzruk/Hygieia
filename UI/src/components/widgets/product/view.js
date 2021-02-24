@@ -70,6 +70,8 @@
         var teamDashboardDetails = {},
             isReload = null;
 
+        console.log('**Vivek** product view controller: $scope = ', $scope);
+
         // set our data before we get things started
         var widgetOptions = angular.copy($scope.widgetConfig.options);
 
@@ -93,9 +95,11 @@
                 var collectId = configuredTeam.collectorItemId;
                 var orderedStages = orderKeys();
                 var stages = [];
+                console.log("**Vivek** product view.js load, collectId = ", collectId);
                 pipelineData
                     .commits(dateBegins, nowTimestamp, collectId)
                     .then(function (response) {
+                        console.log("**Vivek** product view.js load pipelineCommits, response = ", response);
                         response = response[0];
                         for (var x in response.stages) {
                             orderedStages.push(x, x);
@@ -231,6 +235,7 @@
         function processAppsInDashboards(dashboards) {
             ctrl.apps = [];
             var dashFound = false;
+            // console.log("**Vivek** components widgets product view, processAppsInDashboards = ", dashboards);
             if (!dashboards || dashboards.length == 0) {
                 return dashFound;
             }
@@ -240,7 +245,9 @@
                     if (dashboard.type !== 'Team') {
                         continue;
                     }
+                    // console.log("**Vivek** components widgets product view,  processAppsInDashboards dashboard = ", dashboard);
                     if (dashboard.appName == $scope.dashboard.application.name) {
+                        console.log("**Vivek** components widgets product view, processAppsInDashboards dashboard = ", dashboard);
                         ctrl.apps.push({"appName" : dashboard.appName, "dashboardName" : dashboard.name,
                                         "dashboardId" : dashboard.id});
                         dashFound = true;
@@ -267,6 +274,7 @@
                 var boards = [];
 
                 _(result).forEach(function(item) {
+                    console.log("**Vivek** components product addAppWidgets, item = ", item);
                     if(item.description) {
                         boards.push({
                             id: item.id,
@@ -278,6 +286,7 @@
 
                 ctrl.myDashboards = boards;
                 for (var index = 0; index < ctrl.apps.length; index++) {
+                    console.log("**Vivek** component widgets product view, Selected App ", ctrl.apps[index]);
                     // get team dashboard details and see if build and commit widgets are available
                     var dashId = ctrl.apps[index].dashboardId;
 
@@ -315,6 +324,7 @@
         }
 
         function addMyTeams(data) {
+            console.log("**Vivek** product addMyTeams ");
             ctrl.dashboards = paginationWrapperService.processDashboardResponse({"data" : data});
             processAppsInDashboards(ctrl.dashboards); // Use of ==> const myPromise = (new Promise( ** will be better
             addAppWidgets(ctrl.apps);
@@ -368,6 +378,9 @@
                     }else{
                         // add our new config to the array
                         options.teams.push(config);
+
+                        console.log("**Vivek** components widgets product view, addTeam config = ", config);
+                        console.log("**Vivek** components widgets product view, addTeam options = ", options);
 
                         updateWidgetOptions(options);
                     }
@@ -438,6 +451,7 @@
         function teamDashboardId(item) {
             var dashboardDetails = teamDashboardDetails[item.collectorItemId];
             if(dashboardDetails) {
+                // console.log("**Vivek** components product, teamDashboardId = ", dashboardDetails);
                 return dashboardDetails.id;
             }
             return false;
@@ -446,8 +460,10 @@
         function viewTeamStageDetails(team, stage) {
             // only show details if we have commits
             if(!teamStageHasCommits(team, stage)) {
+                console.log("**Vivek** components product viewTeamStageDetails team & stage 1 = ", team, stage);
                 return false;
             }
+            console.log("**Vivek** components product viewTeamStageDetails team & stage 2 = ", team, stage);
 
             $uibModal.open({
                 templateUrl: 'components/widgets/product/environment-commits/environment-commits.html',
@@ -501,9 +517,11 @@
               }
               team.passedGates = pass;
               team.totalGates = response.length;
+              console.log("**Vivek** components product, view initPerc 1 = ", team)
             }).catch (function (e) {
                 team.passedGates = 0;
                 team.totalGates = 0;
+                console.log("**Vivek** components product, view initPerc 2 = ", team)                
             });
           })
         };
@@ -622,18 +640,22 @@
                 options: options
             };
 
+            console.log("**Vivek** product view, updateWidgetOptions data = ", data);
             $scope.upsertWidget(data);
         }
 
         // return whether this stage has commits. used to determine whether details
         // will be shown for this team in the specific stage
         function teamStageHasCommits(team, stage) {
+            console.log("**Vivek** product view, teamStageHasCommits team, stage = ", team, stage);
             return team.stages && team.stages[stage] && team.stages[stage].commits && team.stages[stage].commits.length;
         }
 
         function getTeamComponentData(collectorItemId) {
             var team = teamDashboardDetails[collectorItemId],
                 componentId = team.application.components[0].id;
+
+            console.log("**Vivek** product view, getTeamComponentData team = ", team);
 
             function getCaMetric(metrics, name, fallback) {
                 var val = fallback === undefined ? false : fallback;
@@ -666,6 +688,7 @@
                 $q: $q,
                 component2Id:[]
             };
+            //console.log("**Vivek** product view, getTeamComponentData processDependencyObject = ", processDependencyObject);
 
             // request and process our data
             processDependencyObject.component2Id = getMyComponentId('codeanalysis');
@@ -704,6 +727,7 @@
                     $q: $q,
                     $timeout: $timeout,
                     ctrlStages: ctrl.teamCrlStages[configuredTeam.collectorItemId],
+                    // teamCtrlStages[configuredTeam.collectorItemId], // 
                     prodStageValue:ctrl.prodStages[configuredTeam.collectorItemId]
                 };
 

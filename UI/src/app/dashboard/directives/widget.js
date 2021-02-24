@@ -133,9 +133,8 @@
                         }
                     }
                 }, $scope.widgetDefinition.config);
-                console.log('**Vivek** In widget configModal, modalConfig =');
+                console.log('**Vivek** In widget configModal, modalConfig =', modalConfig);
 
-                console.log(modalConfig);
                 // when the widget closes if an object is passed we'll assume it's an updated
                 // widget configuration so try and send it to the api or update the existing one
                 $uibModal.open(modalConfig).result.then(upsertWidget);
@@ -210,7 +209,7 @@
                 if ($scope.state !== WidgetState.READY) {
                     return;
                 }
-                console.log('**Vivek** In widget init');
+                console.log('**Vivek** In widget init, $scope = ', $scope);
 
                 // grab values from the registered configuration
                 var templateUrl = $scope.widgetDefinition.view.templateUrl;

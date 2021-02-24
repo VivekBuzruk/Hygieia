@@ -51,8 +51,6 @@
         // public methods
         ctrl.submit = submit;
 
-
-
         // init
         (function() {
             collectorData.itemsByType('product').then(function(result) {
@@ -61,6 +59,7 @@
                 var boards = [];
 
                 _(result).forEach(function(item) {
+                    console.log("**Vivek** components product addTeamController, item = ", item);
                     if(item.description) {
                         boards.push({
                             id: item.id,
@@ -87,6 +86,7 @@
                 var name = 'Unknown';
                 var dashBoardId = "";
                 _(ctrl.dashboards).forEach(function(item) {
+                    console.log("**Vivek** components product addTeamController submit, item = ", item);
                     if(ctrl.collectorItemId == item.id) {
                         name = item.title;
                         dashBoardId = item.dashboardId;

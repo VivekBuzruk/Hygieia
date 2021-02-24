@@ -44,7 +44,7 @@
             donut: true,
             donutWidth: 6
         };
-
+        console.log("**Vivek** components product environmentCommits currentStage = ", ctrl.currentStageName);
         // methods
         ctrl.toggleCommitDetails = toggleCommitDetails;
         ctrl.viewCommitInRepo = viewCommitInRepo;

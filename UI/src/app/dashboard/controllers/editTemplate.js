@@ -173,7 +173,7 @@
         }
 
         function admin() {
-            console.log('sending to admin page');
+            $log.info('**DIW-Info** sending to admin page');
             $location.path('/admin');
         }
 

@@ -46,14 +46,14 @@
 
         function processAppsInDashboards(dashboard) {
             ctrl.apps = [];
-            // console.log("**Vivek** admin, getApps = ", dashboards);
+            // $log.debug("**DIW-D** admin, getApps = ", dashboards);
             if (!dashboard || dashboard.length == 0) {
                 return;
             }
             for (var ix in dashboards) {
                 if (dashboards.hasOwnProperty(ix)) {
                     var dashboard = dashboards[ix];
-                    // console.log("**Vivek** dashboard admin, processAppsInDashboards dashboard = ", dashboard);
+                    // $log.debug("**DIW-D** dashboard admin, processAppsInDashboards dashboard = ", dashboard);
                     ctrl.apps.push({"appName" : dashboard.appName, 
                                     "dashboardType" : dashboard.type,
                                     "dashboardName" : dashboard.name, 
@@ -73,6 +73,6 @@
             ctrl.apps.sort( compare );
         }
 
-        console.log('Dashboard', dashboard);
+        $log.debug('**DIW-D** Dashboard ', dashboard);
     }
 })();

@@ -20,6 +20,7 @@
             $timeout = dependencies.$timeout,
             $q = dependencies.$q,
             isReload = dependencies.isReload,
+            $log = dependencies.$log,
             buildData = dependencies.buildData;
 
         // timestamps
@@ -28,7 +29,7 @@
             ninetyDaysAgo = now.add(-90, 'days').valueOf(),
             dateBegins = ninetyDaysAgo;
 
-        console.log("Vivek** build-data process, dependencies = ", dependencies);
+        $log.debug("**DIW-D** build-data process, dependencies = ", dependencies);
         db.lastRequest.where('[type+id]').equals(['build-data', componentId]).first().then(processLastRequestResponse);
         if (dependencies.hasOwnProperty('component2Id')){ 
             var component2Id = dependencies['component2Id'];
@@ -46,9 +47,12 @@
             buildData
                 .details({componentId: componentId, endDateBegins: dateBegins, endDateEnds: dateEnds})
                 .then(function(response) {
-                    processBuildDetailsResponse(response, lastRequest);
+                    return processBuildDetailsResponse(response, lastRequest);
                 })
                 .then(processBuildDetailsData)
+                .catch(function (response) {
+                    $log.info("**DIW-Info** ", response);
+                })
                 .finally(function() {
                     dependencies.cleanseData(db.buildData, ninetyDaysAgo);
                 });
@@ -57,7 +61,7 @@
         function processBuildDetailsResponse(response, lastRequest) {
             // since we're only requesting a minute we'll probably have nothing
             if(!response || !response.result || !response.result.length) {
-                return isReload ? $q.reject('No new data') : false;
+                return isReload ? $q.reject('No new Build Details data') : false;
             }
 
             // save the request object so we can get the delta next time as well
@@ -146,7 +150,7 @@
                     }
                 });
 
-                //console.log("**Vivek** product build-data, successRateData = ", successRateData);
+                //$log.debug("**DIW-D** product build-data, successRateData = ", successRateData);
                 var successRateResponse = regression('linear', successRateData),
                     successRateTrendUp = successRateResponse.equation[0] > 0,
                     totalSuccessfulBuilds = _(rows).filter({success:true}).value().length,

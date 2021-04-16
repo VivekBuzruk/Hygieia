@@ -9,8 +9,8 @@
         .module(HygieiaConfig.module)
         .controller('DashboardController', DashboardController);
 
-    DashboardController.$inject = ['dashboard', '$location', 'dashboardService', 'ScoreDisplayType'];
-    function DashboardController(dashboard, $location, dashboardService, ScoreDisplayType) {
+    DashboardController.$inject = ['dashboard', '$location', 'dashboardService', 'ScoreDisplayType', '$log'];
+    function DashboardController(dashboard, $location, dashboardService, ScoreDisplayType, $log) {
         var ctrl = this;
 
         // if dashboard isn't available through resolve it may have been deleted
@@ -62,6 +62,6 @@
             class : "score"
         };
 
-        console.log('Dashboard', dashboard);
+        $log.debug('**DIW-D** Dashboard ', dashboard);
     }
 })();

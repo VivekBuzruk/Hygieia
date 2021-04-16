@@ -10,8 +10,8 @@
         }});
 
 
-    productViewController.$inject = ['$scope', '$document', '$uibModal', '$location', '$q', '$stateParams', '$timeout', 'buildData', 'codeAnalysisData', 'collectorData', 'dashboardData', 'pipelineData', 'testSuiteData', 'productBuildData', 'productCodeAnalysisData', 'productCommitData', 'productSecurityAnalysisData', 'productTestSuiteData', 'cicdGatesData', 'paginationWrapperService'];
-    function productViewController($scope, $document, $uibModal, $location, $q, $stateParams, $timeout, buildData, codeAnalysisData, collectorData, dashboardData, pipelineData, testSuiteData, productBuildData, productCodeAnalysisData, productCommitData, productSecurityAnalysisData, productTestSuiteData, cicdGatesData, paginationWrapperService) {
+    productViewController.$inject = ['$scope', '$document', '$uibModal', '$location', '$q', '$stateParams', '$timeout', '$log', 'buildData', 'codeAnalysisData', 'collectorData', 'dashboardData', 'pipelineData', 'testSuiteData', 'productBuildData', 'productCodeAnalysisData', 'productCommitData', 'productSecurityAnalysisData', 'productTestSuiteData', 'cicdGatesData', 'paginationWrapperService'];
+    function productViewController($scope, $document, $uibModal, $location, $q, $stateParams, $timeout, $log, buildData, codeAnalysisData, collectorData, dashboardData, pipelineData, testSuiteData, productBuildData, productCodeAnalysisData, productCommitData, productSecurityAnalysisData, productTestSuiteData, cicdGatesData, paginationWrapperService) {
         /*jshint validthis:true */
         var ctrl = this;
 
@@ -20,7 +20,7 @@
         var db = new Dexie('ProductPipelineDb');
         Dexie.Promise.on('error', function(err) {
             // Log to console or show en error indicator somewhere in your GUI...
-            console.log('Uncaught Dexie error: ' + err);
+            $log.warn('*** Hygieia** Uncaught Dexie error: ' + err);
         });
 
         // IMPORTANT: when updating schemas be sure to version the database
@@ -32,6 +32,12 @@
             securityAnalysis: '++id,timestamp,[componentId+timestamp]',
             buildData: '++id,timestamp,[componentId+timestamp]',
             prodCommit: '++id,timestamp,[collectorItemId+timestamp]'
+        });
+
+        db.lastRequest.hook('creating', function (primKey, obj, transaction) {
+            $log.debug("*** DIW-D** lastRequest hook creating, primKey, obj, transaction = ",
+                        primKey, obj, transaction);
+
         });
 
         // create classes
@@ -70,7 +76,7 @@
         var teamDashboardDetails = {},
             isReload = null;
 
-        console.log('**Vivek** product view controller: $scope = ', $scope);
+        $log.debug('**DIW-D** product view controller: $scope = ', $scope);
 
         // set our data before we get things started
         var widgetOptions = angular.copy($scope.widgetConfig.options);
@@ -95,19 +101,24 @@
                 var collectId = configuredTeam.collectorItemId;
                 var orderedStages = orderKeys();
                 var stages = [];
-                console.log("**Vivek** product view.js load, collectId = ", collectId);
+                //var myConfiguredTeam = angular.toJson(configuredTeam); //  pretty);
+                //$log.debug("**DIW-D** product view.js load, configuredTeam in Json = ", myConfiguredTeam);
                 pipelineData
                     .commits(dateBegins, nowTimestamp, collectId)
                     .then(function (response) {
-                        console.log("**Vivek** product view.js load pipelineCommits, response = ", response);
+                        // $log.debug("**DIW-D** product view.js load pipelineCommits, response = ", response);
+                        //var myResponse = angular.toJson(response); //  pretty);
+                        //$log.debug("**DIW-D** product view.js load, pipelineCommits in Json = ", myResponse);
                         response = response[0];
                         for (var x in response.stages) {
+                            //$log.debug("**DIW-D** product view.js load pipelineCommits, x in response.stages = ", x);
                             orderedStages.push(x, x);
                         }
                         stages = orderedStages.keys();
                         ctrl.teamCrlStages[collectId] = stages;
                         ctrl.prodStages[collectId] = response.prodStage;
                         ctrl.orderedStages[collectId] = response.orderMap;
+                        $log.debug("**DIW-D** product view.js load pipelineCommits, stages = ", stages); 
                     }).then(processLoad);
             });
         };
@@ -195,6 +206,7 @@
                             }
                         });
                     });
+                    $log.debug("**DIW-D** product view.js processLoad, newConfigTeams = ", newConfigTeams);
                     $scope.widgetConfig.options.teams = newConfigTeams;
                     updateWidgetOptions($scope.widgetConfig.options);
                 }
@@ -208,6 +220,7 @@
                 isReload = true;
             }
 
+            // Concatenation does not really work as ctrl.teamCrlStages is object
             collectTeamStageData(widgetOptions.teams, [].concat(ctrl.teamCrlStages));
 
             var requestedData = getTeamDashboardDetails(widgetOptions.teams);
@@ -235,7 +248,7 @@
         function processAppsInDashboards(dashboards) {
             ctrl.apps = [];
             var dashFound = false;
-            // console.log("**Vivek** components widgets product view, processAppsInDashboards = ", dashboards);
+            // $log.debug("**DIW-D** components widgets product view, processAppsInDashboards = ", dashboards);
             if (!dashboards || dashboards.length == 0) {
                 return dashFound;
             }
@@ -245,9 +258,9 @@
                     if (dashboard.type !== 'Team') {
                         continue;
                     }
-                    // console.log("**Vivek** components widgets product view,  processAppsInDashboards dashboard = ", dashboard);
+                    // $log.debug("**DIW-D** components widgets product view,  processAppsInDashboards dashboard = ", dashboard);
                     if (dashboard.appName == $scope.dashboard.application.name) {
-                        console.log("**Vivek** components widgets product view, processAppsInDashboards dashboard = ", dashboard);
+                        $log.debug("**DIW-D** components widgets product view, processAppsInDashboards dashboard = ", dashboard);
                         ctrl.apps.push({"appName" : dashboard.appName, "dashboardName" : dashboard.name,
                                         "dashboardId" : dashboard.id});
                         dashFound = true;
@@ -274,7 +287,7 @@
                 var boards = [];
 
                 _(result).forEach(function(item) {
-                    console.log("**Vivek** components product addAppWidgets, item = ", item);
+                    //$log.debug("**DIW-D** components product addAppWidgets, item = ", item);
                     if(item.description) {
                         boards.push({
                             id: item.id,
@@ -286,7 +299,7 @@
 
                 ctrl.myDashboards = boards;
                 for (var index = 0; index < ctrl.apps.length; index++) {
-                    console.log("**Vivek** component widgets product view, Selected App ", ctrl.apps[index]);
+                    //$log.debug("**DIW-D** component widgets product view, Selected App ", ctrl.apps[index]);
                     // get team dashboard details and see if build and commit widgets are available
                     var dashId = ctrl.apps[index].dashboardId;
 
@@ -324,7 +337,7 @@
         }
 
         function addMyTeams(data) {
-            console.log("**Vivek** product addMyTeams ");
+            $log.debug("**DIW-D** product addMyTeams ");
             ctrl.dashboards = paginationWrapperService.processDashboardResponse({"data" : data});
             processAppsInDashboards(ctrl.dashboards); // Use of ==> const myPromise = (new Promise( ** will be better
             addAppWidgets(ctrl.apps);
@@ -379,8 +392,8 @@
                         // add our new config to the array
                         options.teams.push(config);
 
-                        console.log("**Vivek** components widgets product view, addTeam config = ", config);
-                        console.log("**Vivek** components widgets product view, addTeam options = ", options);
+                        $log.debug("**DIW-D** components widgets product view, addTeam config = ", config);
+                        $log.debug("**DIW-D** components widgets product view, addTeam options = ", options);
 
                         updateWidgetOptions(options);
                     }
@@ -451,7 +464,7 @@
         function teamDashboardId(item) {
             var dashboardDetails = teamDashboardDetails[item.collectorItemId];
             if(dashboardDetails) {
-                // console.log("**Vivek** components product, teamDashboardId = ", dashboardDetails);
+                // $log.debug("**DIW-D** components product, teamDashboardId = ", dashboardDetails);
                 return dashboardDetails.id;
             }
             return false;
@@ -460,10 +473,10 @@
         function viewTeamStageDetails(team, stage) {
             // only show details if we have commits
             if(!teamStageHasCommits(team, stage)) {
-                console.log("**Vivek** components product viewTeamStageDetails team & stage 1 = ", team, stage);
+                $log.debug("**DIW-D** components product viewTeamStageDetails team & stage 1 = ", team, stage);
                 return false;
             }
-            console.log("**Vivek** components product viewTeamStageDetails team & stage 2 = ", team, stage);
+            $log.debug("**DIW-D** components product viewTeamStageDetails team & stage 2 = ", team, stage);
 
             $uibModal.open({
                 templateUrl: 'components/widgets/product/environment-commits/environment-commits.html',
@@ -517,11 +530,11 @@
               }
               team.passedGates = pass;
               team.totalGates = response.length;
-              console.log("**Vivek** components product, view initPerc 1 = ", team)
+              $log.debug("**DIW-D** components product, view initPerc 1 = ", team)
             }).catch (function (e) {
                 team.passedGates = 0;
                 team.totalGates = 0;
-                console.log("**Vivek** components product, view initPerc 2 = ", team)                
+                $log.debug("**DIW-D** components product, view initPerc 2 = ", team)                
             });
           })
         };
@@ -640,14 +653,14 @@
                 options: options
             };
 
-            console.log("**Vivek** product view, updateWidgetOptions data = ", data);
+            $log.debug("**DIW-D** product view, updateWidgetOptions data = ", data);
             $scope.upsertWidget(data);
         }
 
         // return whether this stage has commits. used to determine whether details
         // will be shown for this team in the specific stage
         function teamStageHasCommits(team, stage) {
-            console.log("**Vivek** product view, teamStageHasCommits team, stage = ", team, stage);
+            $log.debug("**DIW-D** product view, teamStageHasCommits team, stage = ", team, stage);
             return team.stages && team.stages[stage] && team.stages[stage].commits && team.stages[stage].commits.length;
         }
 
@@ -655,7 +668,7 @@
             var team = teamDashboardDetails[collectorItemId],
                 componentId = team.application.components[0].id;
 
-            console.log("**Vivek** product view, getTeamComponentData team = ", team);
+                $log.debug("**DIW-D** product view, getTeamComponentData team = ", team);
 
             function getCaMetric(metrics, name, fallback) {
                 var val = fallback === undefined ? false : fallback;
@@ -686,9 +699,10 @@
                 isReload: isReload,
                 $timeout: $timeout,
                 $q: $q,
+                $log:$log,
                 component2Id:[]
             };
-            //console.log("**Vivek** product view, getTeamComponentData processDependencyObject = ", processDependencyObject);
+            //$log.debug("**DIW-D** product view, getTeamComponentData processDependencyObject = ", processDependencyObject);
 
             // request and process our data
             processDependencyObject.component2Id = getMyComponentId('codeanalysis');
@@ -714,6 +728,9 @@
                 return;
             }
 
+            // var myResponse = angular.toJson(teamCtrlStages); //  pretty);
+            // $log.debug("**DIW-D** product view.js collectTeamStageData, teamCtrlStages in Json = ", myResponse);
+
             var nowTimestamp = moment().valueOf();
             // loop through each team and request pipeline data
             _(teams).forEach(function(configuredTeam) {
@@ -725,6 +742,7 @@
                     cleanseData: cleanseData,
                     pipelineData: pipelineData,
                     $q: $q,
+                    $log:$log,
                     $timeout: $timeout,
                     ctrlStages: ctrl.teamCrlStages[configuredTeam.collectorItemId],
                     // teamCtrlStages[configuredTeam.collectorItemId], // 
@@ -732,6 +750,9 @@
                 };
 
                 productCommitData.process(commitDependencyObject);
+                // $log.debug("**DIW-D** product view, collectTeamStageData, configuredTeam = ", configuredTeam);
+               // var myResponse = angular.toJson(configuredTeam); //  pretty);
+               //$log.debug("**DIW-D** product view.js collectTeamStageData, configuredTeam in Json = ", myResponse);
             });
         }
         //endregion

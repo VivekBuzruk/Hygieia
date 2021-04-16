@@ -25,8 +25,8 @@
             }
         });
 
-    DeleteWidgetTemplateController.$inject = ['$scope','dashboardData'];
-    function DeleteWidgetTemplateController($scope,dashboardData) {
+    DeleteWidgetTemplateController.$inject = ['$scope','dashboardData', '$log'];
+    function DeleteWidgetTemplateController($scope,dashboardData, $log) {
         var ctrl = this;
         ctrl.removeConfig = removeConfig;
 
@@ -37,7 +37,7 @@
            dashboardData.deleteWidget(dashboardId,widget).success(function (response) {
                 window.location.reload(true);
             }).error(function () {
-               console.log("Error deleting widget");
+               $log.error("**DIW-E** Error deleting widget");
             });
         }
 

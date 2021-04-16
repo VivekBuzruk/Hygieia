@@ -26,7 +26,7 @@
                 restrict: 'EA',
                 templateUrl: 'components/widgets/product/directives/' + name + '.html'
             }, obj);
-            //console.log(obj);
+            //console.log("**DIW-Info** " + obj);
             return obj;
         });
     });

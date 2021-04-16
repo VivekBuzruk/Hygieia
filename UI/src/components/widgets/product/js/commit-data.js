@@ -17,6 +17,7 @@
         var db = dependencies.db,
             configuredTeam = dependencies.configuredTeam,
             $q = dependencies.$q,
+            $log = dependencies.$log,
             $timeout = dependencies.$timeout,
             isReload = dependencies.isReload,
             pipelineData = dependencies.pipelineData,
@@ -38,20 +39,45 @@
         // a current snapshot of data
         var collectorItemId = configuredTeam.collectorItemId;
 
-        console.log("**Vivek** product commit-data, collectorItemId = ", collectorItemId);
+        $log.debug("**DIW-D** product commit-data, collectorItemId = ", collectorItemId);
+        db.lastRequest.each(request => $log.debug("**DIW-D** product commit-data, each lastRequest ", request));
 
         // get our pipeline commit data. start by seeing if we've already run this request
-        db.lastRequest.where('[type+id]').equals(['pipeline-commit', collectorItemId]).first().then(processLastRequestResponse);
-
+        var collection = db.lastRequest.where('[type+id]')
+                      .equals(['pipeline-commit', collectorItemId]);
+        collection.count((count) => {
+            $log.debug("**DIW-D** product commit-data, lastRequest count of pipeline-commit = ", count);
+                if (count > 0) {
+                    collection.first().then((firstRec) => {
+                        $log.debug("**DIW-D** product commit-data, lastRequest first pipeline-commit 1 = ", firstRec);
+                        processLastRequestResponse(firstRec);
+                    })
+                    .catch(() => {
+                        collection.first.delete().then (
+                            (deleteCount) =>
+                            $log.debug("**DIW-D** product commit-data, lastRequest first exception Deleted ",
+                                            deleteCount)
+                        );
+                        $log.debug("**DIW-D** product commit-data, lastRequest first exception pipeline-commit 2 null");
+                        processLastRequestResponse(null)});
+                } else {
+                    // collection.first().then((firstRec) => returns undefined, so avoid
+                    $log.debug("**DIW-D** product commit-data, lastRequest first pipeline-commit 3 null");
+                    processLastRequestResponse(null);
+                }
+            });
         function processLastRequestResponse(lastRequest) {
             // if we already have made a request, just get the delta
-            console.log("**Vivek** product commit-data processLastRequestResponse, lastRequest = ", lastRequest);
+            $log.debug("**DIW-D** product commit-data processLastRequestResponse, lastRequest = ", lastRequest);
             pipelineData
                 .commits(dateBegins, nowTimestamp, collectorItemId)
                 .then(function (response) {
                     return processPipelineCommitResponse(response, lastRequest);
                 })
                 .then(processPipelineCommitData)
+                .catch(function (response) {
+                    $log.info("**DIW-Info** ", response);
+                })
                 .finally(function () {
                     dependencies.cleanseData(db.prodCommit, ninetyDaysAgo);
                 });
@@ -59,7 +85,7 @@
 
         function processPipelineCommitResponse(response, lastRequest) {
             if (!response.length) {
-                return $q.reject('No response found');
+                return $q.reject('No Commit response found');
             }
 
             // we only requested one team so it's safe to assume
@@ -75,6 +101,7 @@
             if (lastRequest) {
                 lastRequest.timestamp = dateEnds;
                 lastRequest.save();
+                $log.debug("**DIW-D** product commit-data processPipelineCommitResponse, lastRequest saved = ", lastRequest);
             }
             // need to add a new item
             else {
@@ -83,6 +110,7 @@
                     type: 'pipeline-commit',
                     timestamp: dateEnds
                 });
+                $log.debug("**DIW-D** product commit-data processPipelineCommitResponse add lastRequest, collectorItemId and dateEnds = ", collectorItemId, dateEnds);
             }
 
             // put all results in the database
@@ -91,7 +119,7 @@
                 // to search the db
                 commit.collectorItemId = collectorItemId;
                 commit.timestamp = commit.processedTimestamps[prodStage];
-
+                //$log.debug("**DIW-D** product commit-data processPipelineCommitResponse, commit = ", commit);
                 db.prodCommit.add(commit);
             });
 
@@ -107,8 +135,8 @@
                     stageDurations = {},
                     stages = [].concat(ctrlStages); // create a local copy so it doesn't get overwritten
 
-                console.log("**Vivek** product commit-data, processPipelineCommitData ctrlStages = ", stages);
-                console.log("**Vivek** product commit-data, processPipelineCommitData team.stages = ", team.stages);
+                    $log.debug("**DIW-D** product commit-data, processPipelineCommitData ctrlStages = ", stages);
+                    $log.debug("**DIW-D** product commit-data, processPipelineCommitData team.stages = ", team.stages);
                 // go backward through the stages and define commit data.
                 // reverse should make it easier to calculate time in the previous stage
                 var nextStageName = ''
@@ -126,7 +154,7 @@
                             timestamp: commitObj.scmCommitTimestamp,
                             in: {} //placeholder for stage duration data per commit
                         };
-
+                        //$log.debug("**DIW-D** product commit-data, processPipelineCommitData commitObj = ", commitObj);
                         // make sure this stage exists to track durations
                         if (!stageDurations[currentStageName]) {
                             stageDurations[currentStageName] = [];

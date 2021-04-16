@@ -5,8 +5,8 @@
         .module(HygieiaConfig.module)
         .controller('addTeamController', addTeamController);
 
-    addTeamController.$inject = ['$scope', '$uibModalInstance', 'collectorData', '$timeout'];
-    function addTeamController($scope, $uibModalInstance, collectorData, $timeout) {
+    addTeamController.$inject = ['$scope', '$uibModalInstance', 'collectorData', '$timeout', '$log'];
+    function addTeamController($scope, $uibModalInstance, collectorData, $timeout, $log) {
         /*jshint validthis:true */
         var ctrl = this;
 
@@ -59,7 +59,7 @@
                 var boards = [];
 
                 _(result).forEach(function(item) {
-                    console.log("**Vivek** components product addTeamController, item = ", item);
+                    $log.debug("**DIW-D** components product addTeamController, item = ", item);
                     if(item.description) {
                         boards.push({
                             id: item.id,
@@ -86,7 +86,7 @@
                 var name = 'Unknown';
                 var dashBoardId = "";
                 _(ctrl.dashboards).forEach(function(item) {
-                    console.log("**Vivek** components product addTeamController submit, item = ", item);
+                    $log.debug("**DIW-D** components product addTeamController submit, item = ", item);
                     if(ctrl.collectorItemId == item.id) {
                         name = item.title;
                         dashBoardId = item.dashboardId;

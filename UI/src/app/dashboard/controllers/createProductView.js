@@ -9,15 +9,15 @@
         .module(HygieiaConfig.module)
         .controller('CreateProductViewController', CreateProductViewController);
 
-        CreateProductViewController.$inject = ['$location', '$uibModalInstance', 'dashboardData', 'DashboardType', 'cmdbData', 'dashboardService', 'paginationWrapperService','$uibModal' ];
-    function CreateProductViewController($location, $uibModalInstance, dashboardData, DashboardType, cmdbData, dashboardService, paginationWrapperService, $uibModal) {
+        CreateProductViewController.$inject = ['$location', '$uibModalInstance', 'dashboardData', 'DashboardType', 'cmdbData', 'dashboardService', 'paginationWrapperService','$uibModal', '$log' ];
+    function CreateProductViewController($location, $uibModalInstance, dashboardData, DashboardType, cmdbData, dashboardService, paginationWrapperService, $uibModal, $log) {
         var ctrl = this;
 
         ctrl.prodDash = [];
         ctrl.selectedDashboard = 1;
 
         function processDashboardResponse(data) {
-            console.log("**Vivek** createProductView processDashboardResponse, data = ", data);
+            $log.debug("**DIW-D** createProductView processDashboardResponse, data = ", data);
             ctrl.prodDash = paginationWrapperService
                               .processDashboardFilterResponse({ 'data': data, 'type' : DashboardType.PRODUCT })
                               .filter(retDashboard => retDashboard.isProduct);
@@ -39,7 +39,7 @@
 
         // method implementations
         function submit(form) {
-            console.log("**Vivek** CreateProductView, selectedDashboard = ", ctrl.selectedDashboard);
+            $log.debug("**DIW-D** CreateProductView, selectedDashboard = ", ctrl.selectedDashboard);
             // redirect to the new dashboard
             $location.path('/dashboard/' + ctrl.selectedDashboard.id);
             $uibModalInstance.dismiss();

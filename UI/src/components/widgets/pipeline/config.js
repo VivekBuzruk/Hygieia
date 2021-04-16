@@ -5,8 +5,8 @@
         .module(HygieiaConfig.module)
         .controller('pipelineConfigController', pipelineConfigController);
 
-    pipelineConfigController.$inject = ['modalData', 'deployData', '$uibModalInstance', '$q'];
-    function pipelineConfigController(modalData, deployData, $uibModalInstance, $q) {
+    pipelineConfigController.$inject = ['modalData', 'deployData', '$uibModalInstance', '$q', '$log'];
+    function pipelineConfigController(modalData, deployData, $uibModalInstance, $q, $log) {
         /*jshint validthis:true */
         var ctrl = this;
 
@@ -28,7 +28,7 @@
         function processResponse(dataA) {
 
             var data = dataA[0];
-            console.log("**Vivek** product config, processResponse dataA = ", dataA);
+            $log.debug("**DIW-D** product config, processResponse dataA = ", dataA);
  
             for(var x in modalData.widgetConfig.options.mappings) {
                 var envName = modalData.widgetConfig.options.mappings[x];

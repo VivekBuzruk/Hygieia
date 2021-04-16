@@ -9,8 +9,8 @@
         .module(HygieiaConfig.module + '.core')
         .directive('widgetContainer', widgetContainer);
 
-    widgetContainer.$inject = ['$compile'];
-    function widgetContainer($compile) {
+    widgetContainer.$inject = ['$compile', '$log'];
+    function widgetContainer($compile, $log) {
         return {
             restrict: 'A',
             scope: {
@@ -26,7 +26,7 @@
             if (!$scope.dashboard) {
                 throw new Error('dashboard not accessible by widget-container directive');
             }
-            console.log('**Vivek** widgetContainer controller ');
+            $log.debug('**DIW-D** widgetContainer controller ');
             // keep track of the various types of widgets
             $scope.placeholders = [];
             $scope.registeredWidgets = {};
@@ -48,7 +48,7 @@
                 if(!widget.attrs.name) {
                     throw new Error('Widget name not defined');
                 }
-                console.log('**Vivek** widgetContainer registerWidget, widget = ' + widget.attrs.name);
+                $log.debug('**DIW-D** widgetContainer registerWidget, widget = ' + widget.attrs.name);
                 var name = widget.attrs.name = widget.attrs.name.toLowerCase();
 
                 if(!$scope.registeredWidgets[name]) {
@@ -66,7 +66,7 @@
                 var widgetNum = ($scope.registeredWidgets[name].length - 1);
                 var widgetId = name + widgetNum;
                 if (widget.attrs["widgetIndex"]) {
-                    console.log('**Vivek** widgetContainer registerWidget, WidgetNum = ' + widgetNum +
+                    $log.debug('**DIW-D** widgetContainer registerWidget, WidgetNum = ' + widgetNum +
                                  ', widget index = ' + widget.attrs["widgetIndex"]);
                     if (widgetNum !== widget.attrs["widgetIndex"]) {
                         widgetId = name + widget.attrs["widgetIndex"];
@@ -81,13 +81,13 @@
                         // process widget with the config object
                         foundConfig = config;
                         configInDashboard = true;
-                        console.log('**Vivek** widgetContainer registerWidget, id = ' + widgetId);
+                        $log.debug('**DIW-D** widgetContainer registerWidget, id = ' + widgetId);
                     }
                 });
 
                 if (widget.callback) { // widget -> processWidget
                     $scope.processedWidgetNames.push(widgetId);
-                    // console.log('**Vivek** widgetContainer registerWidget, callback = ' + widget.callback);
+                    // $log.debug('**DIW-D** widgetContainer registerWidget, callback = ' + widget.callback);
                     widget.callback(configInDashboard, foundConfig, $scope.dashboard);
                 }
             }
@@ -104,8 +104,8 @@
                 _($scope.dashboard.application.components).forEach(function (component, idx) {
                     if(component.id == newComponent.id) {
                         foundComponent = true;
-                        console.log('**Vivek** In widgetContainer upsertComponent, component = ', component);
-                        console.log('**Vivek** In widgetContainer upsertComponent, newComponent = ', newComponent);
+                        $log.debug('**DIW-D** In widgetContainer upsertComponent, component = ', component);
+                        $log.debug('**DIW-D** In widgetContainer upsertComponent, newComponent = ', newComponent);
                         $scope.dashboard.application.components[idx] = newComponent;
                         // var buildCollector = modalData.dashboard.application.components[0].collectorItems.Build,
                         // savedCollectorBuildJob = buildCollector ? buildCollector[0].description : null;
@@ -119,7 +119,7 @@
                 });
 
                 if(!foundComponent) {
-                    console.log('**Vivek** In widgetContainer upsertComponent, component not found = ', newComponent);
+                    $log.debug('**DIW-D** In widgetContainer upsertComponent, component not found = ', newComponent);
                     $scope.dashboard.application.components.push(newComponent);
                 }
             }
@@ -133,14 +133,14 @@
                         return config.options.id === newConfig.options.id;
                     }).forEach(function (config, idx) {
                         foundMatch = true;
-                        console.log('**Vivek** In widgetContainer upsertWidget, foundMatch config updated = ', config);                       
+                        $log.debug('**DIW-D** In widgetContainer upsertWidget, foundMatch config updated = ', config);                       
                         $scope.dashboard.widgets[idx] = angular.extend(config, newConfig);
                     });
-                console.log('**Vivek** In widgetContainer upsertWidget, newConfig = ', newConfig);
+                    $log.debug('**DIW-D** In widgetContainer upsertWidget, newConfig = ', newConfig);
                 if(!foundMatch) {
                     $scope.dashboard.widgets.push(newConfig);
                 }
-                console.log('**Vivek** In widgetContainer upsertWidget, dashboard.widgets = ', dashboard.widgets);                
+                $log.debug('**DIW-D** In widgetContainer upsertWidget, dashboard.widgets = ', dashboard.widgets);                
             }
         }
 
@@ -151,7 +151,7 @@
             if ($scope.placeholders.length === 0) {
                 return;
             }
-            console.log('**Vivek** widgetContainer Link');
+            $log.debug('**DIW-D** widgetContainer Link');
             _($scope.dashboard.widgets)
                 .filter(function (widget) {
                     return $scope.processedWidgetNames.indexOf(widget.options.id) == -1;
@@ -159,7 +159,7 @@
                 .forEach(function (item, idx) {
                     var remainder = idx % $scope.placeholders.length;
                     var widget = $scope.dashboard.widgets[idx];
-                    console.log('**Vivek** widgetContainer Link, Linked ' + widget.name);
+                    $log.debug('**DIW-D** widgetContainer Link, Linked ' + widget.name);
                     var el = $compile('<widget name="' + widget.name + '"></widget>')($scope);
 
                     $scope.placeholders[remainder].element.append(el);

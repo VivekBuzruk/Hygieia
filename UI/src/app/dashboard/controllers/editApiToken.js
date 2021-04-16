@@ -20,10 +20,10 @@
             form.expDt.$setValidity('apiTokenError', true);
 
             if (form.$valid) {
-                console.log('val is ' + document.cdf.apiUser);
-                console.log('val is ' + document.cdf.apiUser.value);
-                console.log('dt is ' + document.cdf.expDt);
-                console.log('dt is ' + document.cdf.expDt.value);
+                $log.info('**DIW-Info** val is ' + document.cdf.apiUser);
+                $log.info('**DIW-Info** val is ' + document.cdf.apiUser.value);
+                $log.info('**DIW-Info** dt is ' + document.cdf.expDt);
+                $log.info('**DIW-Info** dt is ' + document.cdf.expDt.value);
                 var id = tokenItem.id
                 var selectedDt = Date.parse(document.cdf.expDt.value);
                 var momentSelectedDt = moment(selectedDt);
@@ -37,11 +37,11 @@
                 userData
                     .updateToken(apitoken, id)
                     .success(function (response) {
-                        console.log(response);
+                        $log.info('**DIW-Info** ' + response);
                         $uibModalInstance.close();
                     })
                     .error(function(response) {
-                        console.log(response);
+                        $log.error('**DIW-E** ' + response);
                         form.expDt.$setValidity('apiTokenError', false);
                     });
             }

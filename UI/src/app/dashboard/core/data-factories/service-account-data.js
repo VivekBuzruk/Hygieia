@@ -5,7 +5,7 @@
         .module(HygieiaConfig.module + '.core')
         .factory('serviceAccountData', serviceAccountData);
 
-    function serviceAccountData($http) {
+    function serviceAccountData($http, $log) {
         var testDetailRoute = 'test-data/signup_detail.json';
         var adminRoute = '/api/admin';
 
@@ -20,7 +20,7 @@
         // reusable helper
         function getPromise(route) {
             return $http.get(route).then(function (response) {
-              console.log("Data="+ JSON.stringify(response.data));
+              $log.info("**DIW-Info** Data="+ JSON.stringify(response.data));
                 return response.data;
             });
         }
@@ -29,7 +29,7 @@
           var route = adminRoute + "/allServiceAccounts";
           if(HygieiaConfig.local)
           {
-            console.log("In local testing");
+            $log.info("**DIW-Info** In local testing");
             return getPromise(testDetailRoute);
           }
           else

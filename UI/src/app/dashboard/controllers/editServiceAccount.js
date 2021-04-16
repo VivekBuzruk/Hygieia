@@ -19,8 +19,8 @@
 
             if (form.$valid) {
 
-                console.log('val is ' + document.cdf.serviceAccount.value);
-                console.log('val is ' + document.cdf.fileNames.value);
+                $log.info('**DIW-Info** val is ' + document.cdf.serviceAccount.value);
+                $log.info('**DIW-Info** val is ' + document.cdf.fileNames.value);
 
                 var account = {
                     "serviceAccount" : document.cdf.serviceAccount.value,
@@ -31,13 +31,13 @@
                 serviceAccountData
                     .updateAccount(account,ctrl.id)
                     .success(function (response) {
-                        console.log(response);
+                        $log.info('**DIW-Info** ' + response);
                         //$scope.apiKey = response;
 
                         $uibModalInstance.close();
                     })
                     .error(function(response) {
-                        console.log(response);
+                        $log.error('**DIW-E** ' + response);
 
                     });
             }

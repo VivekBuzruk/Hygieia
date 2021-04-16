@@ -9,14 +9,14 @@
         .controller('AdminController', AdminController);
 
 
-    AdminController.$inject = ['$scope', 'dashboardData', '$location', '$uibModal', 'userService', 'authService', 'userData', 'dashboardService', 'templateMangerData', 'paginationWrapperService','$sce','$q','serviceAccountData','featureFlagsData'];
-    function AdminController($scope, dashboardData, $location, $uibModal, userService, authService, userData, dashboardService, templateMangerData, paginationWrapperService,$sce,$q,serviceAccountData,featureFlagsData) {
+    AdminController.$inject = ['$scope', 'dashboardData', '$location', '$uibModal', 'userService', 'authService', 'userData', 'dashboardService', 'templateMangerData', 'paginationWrapperService','$sce','$q','$log','serviceAccountData','featureFlagsData'];
+    function AdminController($scope, dashboardData, $location, $uibModal, userService, authService, userData, dashboardService, templateMangerData, paginationWrapperService,$sce,$q,$log,serviceAccountData,featureFlagsData) {
         var ctrl = this;
         if (userService.isAuthenticated() && userService.isAdmin()) {
             $location.path('/admin');
         }
         else {
-            console.log("Not authenticated redirecting");
+            $log.warn("**DIW-W** Not authenticated redirecting");
             $location.path('#');
         }
 
@@ -117,14 +117,14 @@
 
         function processAppsInDashboards(dashboards) {
             ctrl.apps = [];
-            // console.log("**Vivek** admin, getApps = ", dashboards);
+            // $log.debug("**DIW-D** admin, getApps = ", dashboards);
             if (!dashboards || dashboards.length == 0) {
                 return;
             }
             for (var ix in dashboards) {
                 if (dashboards.hasOwnProperty(ix)) {
                     var dashboard = dashboards[ix];
-                    // console.log("**Vivek** dashboard admin, processAppsInDashboards dashboard = ", dashboard);
+                    // $log.debug("**DIW-D** dashboard admin, processAppsInDashboards dashboard = ", dashboard);
                     ctrl.apps.push({"appName" : dashboard.appName, 
                                     "dashboardType" : dashboard.type,
                                     "dashboardName" : dashboard.name, 
@@ -147,7 +147,7 @@
         function processDashboardResponse(data) {
             ctrl.dashboards = paginationWrapperService.processDashboardResponse(data, ctrl.dashboardType);
             processAppsInDashboards(ctrl.dashboards);
-            //console.log("**Vivek** dashboard admin, processDashboardResponse ctrl.apps = ", ctrl.apps);
+            //$log.debug("**DIW-D** dashboard admin, processDashboardResponse ctrl.apps = ", ctrl.apps);
         }
 
         function processDashboardError(data) {
@@ -214,7 +214,7 @@
         }
 
         function editDashboard(item) {
-            console.log("Edit Dashboard in Admin");
+            $log.info("**DIW-Info** Edit Dashboard in Admin");
 
             var mymodalInstance = $uibModal.open({
                 templateUrl: 'app/dashboard/views/editDashboard.html',
@@ -236,7 +236,7 @@
         }
 
         function editToken(item) {
-            console.log("Edit token in Admin");
+            $log.info("**DIW-Info** Edit token in Admin");
 
             var mymodalInstance=$uibModal.open({
                 templateUrl: 'app/dashboard/views/editApiToken.html',
@@ -261,7 +261,7 @@
         }
 
         function generateToken() {
-            console.log("Generate token in Admin");
+            $log.info("**DIW-Info** Generate token in Admin");
 
             var mymodalInstance = $uibModal.open({
                 templateUrl: 'app/dashboard/views/generateApiToken.html',
@@ -276,7 +276,7 @@
         }
 
         function editAccount(item) {
-            console.log("Edit service account in Admin");
+            $log.info("**DIW-Info** Edit service account in Admin");
 
             var mymodalInstance=$uibModal.open({
                 templateUrl: 'app/dashboard/views/edit-service-account.html',
@@ -295,7 +295,7 @@
         }
 
         function addServiceAccount() {
-            console.log("Add service account");
+            $log.info("**DIW-Info** Add service account");
 
             var mymodalInstance = $uibModal.open({
                 templateUrl: 'app/dashboard/views/add-service-account.html',
@@ -310,7 +310,7 @@
         }
 
         function addFeatureFlag() {
-            console.log("Add Feature flags");
+            $log.info("**DIW-Info** Add Feature flags");
 
             var mymodalInstance = $uibModal.open({
                 templateUrl: 'app/dashboard/views/add-featureflag.html',
@@ -378,7 +378,7 @@
 
         // Edit template
         function editTemplate(item) {
-            console.log("Edit Template in Admin");
+            $log.info("**DIW-Info** Edit Template in Admin");
             var mymodalInstance = $uibModal.open({
                 templateUrl: 'app/dashboard/views/editTemplate.html',
                 controller: 'EditTemplateController',

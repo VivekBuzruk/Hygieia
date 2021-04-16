@@ -19,6 +19,7 @@
             collectorItemId = dependencies.collectorItemId,
             $timeout = dependencies.$timeout,
             $q = dependencies.$q,
+            $log = dependencies.$log,
             isReload = dependencies.isReload,
             getCaMetric = dependencies.getCaMetric,
             codeAnalysisData = dependencies.codeAnalysisData;
@@ -42,7 +43,7 @@
                     .then(function (response) {
                         // since we're only requesting a minute we'll probably have nothing
                         if (!response || !response.result || !response.result.length) {
-                            return isReload ? $q.reject('No new data') : false;
+                            return isReload ? $q.reject('No new Security Analysis data') : false;
                         }
 
                         // save the request object so we can get the delta next time as well
@@ -113,6 +114,9 @@
                                 });
                             });
                         });
+                    })
+                    .catch(function (response) {
+                        $log.info("**DIW-Info** ", response);
                     })
                     .finally(function () {
                         dependencies.cleanseData(db.securityAnalysis, ninetyDaysAgo);

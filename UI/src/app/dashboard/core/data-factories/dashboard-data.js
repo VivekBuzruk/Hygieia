@@ -12,7 +12,7 @@
         })
         .factory('dashboardData', dashboardData);
 
-    function dashboardData($http) {
+    function dashboardData($http, $log) {
         var testSearchRoute = 'test-data/dashboard_search.json';
         var testDetailRoute = 'test-data/dashboard_detail.json';
         var testOwnedRoute='test-data/dashboard_owned.json';
@@ -115,7 +115,7 @@
 
         // creates a new dashboard
         function create(data) {
-            console.log("**Vivek** dashboard-data create, Dashboard creation Data = ", data);
+            $log.debug("**DIW-D** dashboard-data create, Dashboard creation Data = ", data);
             return $http.post(dashboardRoute, data)
                 .success(function (response) {
                     return response.data;
@@ -128,7 +128,7 @@
         // renames a dashboard
 
         function renameDashboard(id,newDashboardName){
-            console.log("**Info** In data renaming dashboard");
+            $log.info("**DIW-Info** In data renaming dashboard");
             var postData= {
                 title: newDashboardName
              }
@@ -138,7 +138,7 @@
                     return response.data;
                 })
                 .error (function (response) {
-                    console.log("Error Occured while renaming Dashboard in Data layer:"+JSON.stringify(response));
+                    $log.warn("**DIW-W** Error Occured while renaming Dashboard in Data layer:"+JSON.stringify(response));
                     return response.data;
                 });
         }
@@ -170,7 +170,7 @@
             // create a copy so we don't modify the original
             widget = angular.copy(widget);
 
-            console.log('**Info** dashboard-data upsertwidget, Widget Config', widget);
+            $log.debug('**DIW-D** dashboard-data upsertwidget, Widget Config', widget);
 
             var widgetId = widget.id;
 
@@ -211,7 +211,7 @@
         // can be used to delete existing widget
         function deleteWidget(dashboardId, widget) {
             widget = angular.copy(widget);
-            console.log('**Info** Delete widget config', widget);
+            $log.info('**DIW-Info** Delete widget config', widget);
             var widgetId = widget.id;
             if (widgetId) {
                 // remove the id since that would cause an api failure
@@ -296,7 +296,7 @@
                         return response.data;
                     })
                 .error (function (response) {
-                    console.log("Error Occured while saving the configuration:"+JSON.stringify(response));
+                    $log.warn("**DIW-W** Error Occured while saving the configuration:"+JSON.stringify(response));
                     return response.data;
                 });
         }

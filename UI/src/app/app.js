@@ -51,7 +51,9 @@ var localStorageSupported = (function () {
         'angularUtils.directives.dirPagination',
         'ngRateIt'
     ])
-
+    .config(['$logProvider', function($logProvider) {
+        $logProvider.debugEnabled(false); // turns on/off the calls to $log.debug, but not the others
+    }])
         .config(['$httpProvider', 'jwtOptionsProvider',
             // intercepting the http provider allows us to use relative routes
             // in data providers and then redirect them to a remote api if

@@ -35,7 +35,7 @@
         } else if (args[i].name.toLowerCase() == "name") {
           arr.push(name);
         } else {
-          console.log("invalid paramter..where do I get it?");
+          console.log("**DIW-W** invalid paramter..where do I get it?");
         }
       }
     }
@@ -184,11 +184,12 @@
     var testProfilesRoute = 'test-data/profiles.json';
     var profilesRoute = '/api/maturityModel/profiles';
     return $http.get(HygieiaConfig.local ? testProfilesRoute : profilesRoute).then(function(response) {
+      //console.log("**DIW-D** Maturity Model profile response = ", response)
       return response.data;
     });
   }
 
-  function cicdGatesData($http, $q, $injector) {
+  function cicdGatesData($http, $q, $log, $injector) {
 
     injector = $injector;
 
@@ -197,10 +198,13 @@
       return profilesData($http).then(function(res) {
         var testDetailRoute = 'test-data/cicd-gates.json';
         var detailRoute = '/api/maturityModel/profile';
-        var profileId = res[0].profile;
+        $log.debug("**DIW-D** Maturity Model res = ", res);
+        var profileId = res[0]; // res[0].profile;  // 
         return $http.get(HygieiaConfig.local ? testDetailRoute : detailRoute + '/' + profileId)
           .then(function(response) {
+            $log.debug("**DIW-D** Maturity Model profile response = ", response);
             var data = response.data.rules;
+            //$log.debug("**DIW-D** Maturity Model profile data = ", data);
             var jsonObj = JSON.parse(data);
             return fillDetails(jsonObj, $q, name, dashboardId, collectorItemId, componentId).then(function(d) {
               return d;

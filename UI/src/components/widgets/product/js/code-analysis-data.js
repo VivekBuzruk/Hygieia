@@ -19,6 +19,7 @@
             collectorItemId = dependencies.collectorItemId,
             $timeout = dependencies.$timeout,
             $q = dependencies.$q,
+            $log = dependencies.$log,
             isReload = dependencies.isReload,
             getCaMetric = dependencies.getCaMetric,
             codeAnalysisData = dependencies.codeAnalysisData;
@@ -41,9 +42,12 @@
             codeAnalysisData
                 .staticDetails({componentId: componentId, dateBegins: dateBegins, dateEnds: dateEnds})
                 .then(function(response) {
-                    processStaticAnalysisResponse(response, lastRequest, dateEnds);
+                    return processStaticAnalysisResponse(response, lastRequest, dateEnds);
                 })
                 .then(processStaticAnalysisData)
+                .catch(function (response) {
+                    $log.info("**DIW-Info** ", response);
+                })
                 .finally(function() {
                     dependencies.cleanseData(db.codeAnalysis, ninetyDaysAgo);
                 });
@@ -52,7 +56,7 @@
         function processStaticAnalysisResponse(response, lastRequest, dateEnds) {
             // since we're only requesting a minute we'll probably have nothing
             if(!response || !response.result || !response.result.length) {
-                return isReload ? $q.reject('No new data') : false;
+                return isReload ? $q.reject('No new Code Analysis data') : false;
             }
 
             // save the request object so we can get the delta next time as well

@@ -8,8 +8,8 @@
         .module(HygieiaConfig.module)
         .controller('BuildWidgetViewController', BuildWidgetViewController);
 
-    BuildWidgetViewController.$inject = ['$scope', 'buildData', 'DisplayState', '$q', '$uibModal'];
-    function BuildWidgetViewController($scope, buildData, DisplayState, $q, $uibModal) {
+    BuildWidgetViewController.$inject = ['$scope', 'buildData', 'DisplayState', '$q', '$uibModal', '$log'];
+    function BuildWidgetViewController($scope, buildData, DisplayState, $q, $uibModal, $log) {
         var ctrl = this;
         var builds = [];
 

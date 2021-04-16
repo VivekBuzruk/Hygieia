@@ -5,12 +5,12 @@
         .module(HygieiaConfig.module)
         .controller('PerformanceDetailController', PerformanceDetailController);
 
-    PerformanceDetailController.$inject = ['$uibModalInstance','index', 'warnings', 'good', 'bad', 'DashStatus'];
-    function PerformanceDetailController($uibModalInstance, index, warnings, good, bad, DashStatus) {
+    PerformanceDetailController.$inject = ['$uibModalInstance','index', 'warnings', 'good', 'bad', 'DashStatus', '$log'];
+    function PerformanceDetailController($uibModalInstance, index, warnings, good, bad, DashStatus, $log) {
         /*jshint validthis:true */
         var ctrl = this;
 
-        console.log(index);
+        $log.info("**DIW-Info** " + index);
 
         if (index == 0){
           ctrl.healthruleviolations = good.reverse();

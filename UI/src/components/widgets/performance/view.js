@@ -5,8 +5,8 @@
         .module(HygieiaConfig.module)
         .controller('performanceViewController', performanceViewController);
 
-    performanceViewController.$inject = ['$q', '$scope','performanceData', '$uibModal', 'collectorData'];
-    function performanceViewController($q, $scope, performanceData, $uibModal, collectorData) {
+    performanceViewController.$inject = ['$q', '$scope','performanceData', '$uibModal', 'collectorData', '$log'];
+    function performanceViewController($q, $scope, performanceData, $uibModal, collectorData, $log) {
         var ctrl = this;
 
         ctrl.callsChartOptions = {
@@ -104,7 +104,7 @@
                 componentId: $scope.widgetConfig.componentId,
             };
 
-            console.log($scope.widgetConfig.componentId);
+            $log.debug("**DIW-D** " + $scope.widgetConfig.componentId);
             var count =0;
             collectorData.itemsByType('appPerformance').then(function(data){
                 data.forEach(function(element){

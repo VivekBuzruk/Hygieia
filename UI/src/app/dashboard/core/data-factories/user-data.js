@@ -5,7 +5,7 @@
         .module(HygieiaConfig.module + '.core')
         .factory('userData', userData);
 
-    function userData($http) {
+    function userData($http, $log) {
         var testDetailRoute = 'test-data/signup_detail.json';
         var adminRoute = '/api/admin';
         var userRoute = '/api/users';
@@ -24,7 +24,7 @@
         // reusable helper
         function getPromise(route) {
             return $http.get(route).then(function (response) {
-              console.log("Data="+ JSON.stringify(response.data));
+              $log.info("**DIW-Info** Data="+ JSON.stringify(response.data));
                 return response.data;
             });
         }
@@ -33,7 +33,7 @@
 
           if(HygieiaConfig.local)
           {
-            console.log("In local testing");
+            $log.info("**DIW-Info** In local testing");
             return getPromise(testDetailRoute);
           }
           else

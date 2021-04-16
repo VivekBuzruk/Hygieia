@@ -8,8 +8,8 @@
 			RepoConfigController);
 
 	RepoConfigController.$inject = [ 'modalData', '$uibModalInstance',
-			'collectorData' ];
-	function RepoConfigController(modalData, $uibModalInstance, collectorData) {
+			'collectorData', '$log' ];
+	function RepoConfigController(modalData, $uibModalInstance, collectorData, $log) {
 		var ctrl = this;
 		var widgetConfig = modalData.widgetConfig;
 
@@ -94,7 +94,7 @@
 						try {
 							createCollectorItem().then(processCollectorItemResponse, handleError);
 						} catch (e) {
-							console.log(e);
+							$log.error("**DIW-E** " + e);
 						}
 					} else {
 						collectorData.encrypt(ctrl.repopass).then(function (response) {
@@ -106,7 +106,7 @@
 							try {
 								createCollectorItem().then(processCollectorItemResponse, handleError);
 							} catch (e) {
-								console.log(e);
+								$log.error("**DIW-E** " + e);
 							}
 						});
 					}
@@ -117,7 +117,7 @@
 						try {
 							createCollectorItem().then(processCollectorItemResponse, handleError);
 						} catch (e) {
-							console.log(e);
+							$log.error("**DIW-E** " + e);
 						}
 					} else {
 						collectorData.encrypt(ctrl.repoPersonalAccessToken).then(function (response) {
@@ -126,7 +126,7 @@
 							try {
 								createCollectorItem().then(processCollectorItemResponse, handleError);
 							} catch (e) {
-								console.log(e);
+								$log.error("**DIW-E** " + e);
 							}
 						});
 					}

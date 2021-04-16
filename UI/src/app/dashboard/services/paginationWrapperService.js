@@ -4,9 +4,9 @@
     angular
         .module(HygieiaConfig.module)
         .service('paginationWrapperService', paginationWrapperService);
-    paginationWrapperService.$inject = ['$q', 'DashboardType', 'dashboardData', 'dashboardService', 'userService'];
+    paginationWrapperService.$inject = ['$q', 'DashboardType', 'dashboardData', 'dashboardService', 'userService', '$log'];
 
-    function paginationWrapperService ($q, DashboardType, dashboardData, dashboardService, userService) {
+    function paginationWrapperService ($q, DashboardType, dashboardData, dashboardService, userService, $log) {
         var currentPage = 0;
         var pageSize = 10;
         var currentPageMyDash = 0;
@@ -120,7 +120,7 @@
             for (var x = 0; x < data.length; x++) {
                 var board = getDashboard(data[x]);
                 if(board.isProduct) {
-                    //console.log(board);
+                    //$log.debug("**DIW-D** " + board);
                 }
                 dashboardsLocal.push(board);
             }
@@ -148,7 +148,7 @@
                 };
 
                 if(board.isProduct) {
-                    //console.log(board);
+                    //$log.debug("**DIW-D** " + board);
                 }
                 dashboardsLocal.push(board);
             }

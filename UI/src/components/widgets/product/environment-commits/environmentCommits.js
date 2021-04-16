@@ -5,8 +5,8 @@
         .module(HygieiaConfig.module)
         .controller('productEnvironmentCommitController', productEnvironmentCommitController);
 
-    productEnvironmentCommitController.$inject = ['modalData', '$uibModalInstance', '$timeout'];
-    function productEnvironmentCommitController(modalData, $uibModalInstance, $timeout) {
+    productEnvironmentCommitController.$inject = ['modalData', '$uibModalInstance', '$timeout', '$log'];
+    function productEnvironmentCommitController(modalData, $uibModalInstance, $timeout, $log) {
         /*jshint validthis:true */
         var ctrl = this;
 
@@ -44,7 +44,7 @@
             donut: true,
             donutWidth: 6
         };
-        console.log("**Vivek** components product environmentCommits currentStage = ", ctrl.currentStageName);
+        $log.debug("**DIW-D** components product environmentCommits currentStage = ", ctrl.currentStageName);
         // methods
         ctrl.toggleCommitDetails = toggleCommitDetails;
         ctrl.viewCommitInRepo = viewCommitInRepo;

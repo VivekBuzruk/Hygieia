@@ -85,7 +85,7 @@
         }
 
         function admin() {
-            console.log('sending to admin page');
+            $log.info('**DIW-Info** sending to admin page');
             $location.path('/admin');
         }
 
@@ -189,17 +189,17 @@
 
         function filterNotOwnedList(db1, db2) {
 
-            console.log("size before is:" + db1.length);
+            $log.info("**DIW-Info** size before is:" + db1.length);
 
             var jointArray = db1.concat(db2);
 
-            console.log("size after is:" + jointArray.length);
+            $log.info("**DIW-Info** size after is:" + jointArray.length);
 
             var uniqueArray = jointArray.filter(function (elem, pos) {
                 return jointArray.indexOf(elem) == pos;
             });
 
-            console.log("size after reduction  is:" + uniqueArray.length);
+            $log.info("**DIW-Info** size after reduction  is:" + uniqueArray.length);
             ctrl.dashboards = uniqueArray;
         }
 

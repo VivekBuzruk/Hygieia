@@ -104,27 +104,27 @@
         }
 
         function onChange(event, items) {
-            console.log("onChange event: "+event+" items:"+items);
+            $log.info("**DIW-Info** onChange event: "+event+" items:"+items);
         };
 
         function onDragStart(event, ui) {
-            console.log("onDragStart event: "+event+" ui:"+ui);
+            $log.info("**DIW-Info** onDragStart event: "+event+" ui:"+ui);
         };
 
         function onDragStop(event, ui) {
-            console.log("onDragStop event: "+event+" ui:"+ui);
+            $log.info("**DIW-Info** onDragStop event: "+event+" ui:"+ui);
         };
 
         function onResizeStart(event, ui) {
-            console.log("onResizeStart event: "+event+" ui:"+ui);
+            $log.info("**DIW-Info** onResizeStart event: "+event+" ui:"+ui);
         };
 
         function onResizeStop(event, ui) {
-            console.log("onResizeStop event: "+event+" ui:"+ui);
+            $log.info("**DIW-Info** onResizeStop event: "+event+" ui:"+ui);
         };
 
         function admin() {
-            console.log('sending to admin page');
+            $log.info('**DIW-Info** sending to admin page');
             $location.path('/admin');
         }
 

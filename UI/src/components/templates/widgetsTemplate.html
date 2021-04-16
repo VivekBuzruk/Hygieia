@@ -2,8 +2,12 @@
     <div id="header">
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
-                <a ng-href="#/" class="dashboard-logo"></a>
-                {{::ctrl.dashboard.title}}
+                <div class="navbar-header">
+                    <a ng-href="https://www.sarvatech.co.in/" target="_blank" class="stech2-logo dashboard-logo-inverse"></a>
+                    <a ng-href="#/" class="dashboard2-logo dashboard-logo-inverse"></a>
+                </div>
+                {{::ctrl.dashboard.title | trunText:50}}
+
                 <div class="pipeline-toggle btn-group">
                     <span class="btn" ng-repeat="tab in template.tabs" ng-click="template.toggleView($index)"
                           ng-class="tab.name == template.widgetView ? 'btn-primary' : 'btn-default'">

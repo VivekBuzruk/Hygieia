@@ -311,7 +311,56 @@ body {
         top: @dash-header-logo-top;
         width: @dash-header-logo-width;
         height: @dash-header-logo-height;
+        margin-right: 10px;
 
+        &.dashboard-logo-inverse {
+            background-image: url(@dash-header-logo-inverse-url);
+        }
+    }
+
+    .stech-logo {
+        background: url(@stech-header-logo-url);
+        display: inline-block;
+        background-size: contain;
+        position: absolute;
+        margin-left:calc(@dash-header-logo-width+@dash-header-logo-left+10px);
+        left: @dash-header-logo-left;
+        top: @dash-header-logo-top;
+        width: @dash-header-logo-width;
+        height: @dash-header-logo-height;
+
+        &.dashboard-logo-inverse {
+            background-image: url(@stech-header-logo-url);
+        }
+    }
+
+    .stech2-logo {
+        background: url(@stech-header-2-logo-url) no-repeat center center;
+        background-size: contain;
+        display: inline-block;
+        position: absolute;
+        left: @dash-header-logo-left;
+        top: @dash-header-logo-top;
+        width: @dash-stech-header2-logo-width;
+        height: @dash-header-logo-height;
+        margin-right: 10px;
+
+        &.dashboard-logo-inverse {
+            background-image: url(@stech-header-2-logo-inverse-url);
+        }
+    }
+
+    .dashboard2-logo {
+        background: url(@dash-header-logo-url) no-repeat center center;
+        display: inline-block;
+        background-size: contain;
+        position: absolute;
+        margin-left:calc(@dash-stech-header2-logo-width+@dash-header-logo-left);
+        left: @dash-header-logo-left;
+        top: @dash-header-logo-top;
+        width: @dash-header-logo-width;
+        height: @dash-header-logo-height;
+        margin-right: 10px;
 
         &.dashboard-logo-inverse {
             background-image: url(@dash-header-logo-inverse-url);
@@ -329,6 +378,14 @@ body {
         height: auto;
         display: inline-block;
     }
+}
+
+#header > .navbar-inverse {
+    color: @dash-header-inverse-text;
+}
+
+#header a {
+    color: @dash-header-inverse-text;
 }
 
 #footer {

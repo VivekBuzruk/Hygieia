@@ -1,9 +1,13 @@
 <div ng-controller="ProductSummaryController as ctrl">
     <div id="prodSummary" class="main-content">
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <a ng-href="#/" class="dashboard-logo"></a>
-
-            <div title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</div>
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a ng-href="https://www.sarvatech.co.in/" target="_blank" class="stech2-logo dashboard-logo-inverse"></a>
+                    <a ng-href="#/" class="dashboard2-logo dashboard-logo-inverse"></a>
+                </div>
+                <div title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</div>
+            </div>
         </nav>
         <div class="clear"></div>
     </div>

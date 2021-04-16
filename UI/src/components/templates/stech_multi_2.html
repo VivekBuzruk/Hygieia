@@ -1,9 +1,11 @@
-<div ng-controller="CapOneVivekTemplateController as template">
+<div ng-controller="CapOneDIWTemplateController as template">
     <div id="header">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
-
-                <a ng-href="#/" class="dashboard-logo"></a>
+                <div class="navbar-header">
+                    <a ng-href="https://www.sarvatech.co.in/" target="_blank" class="stech2-logo dashboard-logo"></a>
+                    <a ng-href="#/" class="dashboard2-logo dashboard-logo"></a>
+                </div>
 
                 <h4 title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</h4>
 

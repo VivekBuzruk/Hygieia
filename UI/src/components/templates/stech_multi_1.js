@@ -7,9 +7,9 @@
 
     angular
         .module(HygieiaConfig.module)
-        .controller('CapOneVivekTemplateController', CapOneVivekTemplateController);
+        .controller('CapOneDIWTemplateController', CapOneDIWTemplateController);
 
-    function CapOneVivekTemplateController() {
+    function CapOneDIWTemplateController() {
         var ctrl = this;
 
         ctrl.tabs = [

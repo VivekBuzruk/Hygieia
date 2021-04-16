@@ -7,17 +7,20 @@
         </div>
         <div class="product-dash-header-legend clearfix">
             <span class="commit-blocks-legend town-city">
-          <div class="commit-blocks-legend-block">
-                    <div class="state"></div> 1000 commits
+                <div class="commit-blocks-legend-block">
+                    commit-box sizes indicate - 
                 </div>
                 <div class="commit-blocks-legend-block">
-                    <div class="city"></div> 100 commits
+                    <div class="village"></div> 1 commit
                 </div>
                 <div class="commit-blocks-legend-block">
                     <div class="town"></div> 10 commits
                 </div>
                 <div class="commit-blocks-legend-block">
-                    <div class="village"></div> 1 commit
+                    <div class="city"></div> 100 commits
+                </div>
+                <div class="commit-blocks-legend-block">
+                    <div class="state"></div> 1000 commits
                 </div>
             </span>
         </div>
@@ -39,7 +42,7 @@
                     </a>
 
                     <div class="team-quality">
-                        <div ng-init="ctrl.initPerc(team)">
+                        <!-- <div ng-init="ctrl.initPerc(team)">
                             <div class="team-quality-desc" ng-click="ctrl.viewGatesDetails(team)" ng-if="team.totalGates > 0">
                                 DevOps Maturity Score - <span><a href="" class="cicd-result">
                                         {{team.passedGates}}/{{team.totalGates}}</a></span>
@@ -49,11 +52,31 @@
                                 <score-view-header dashboard-id="{{ctrl.teamDashboardId(team)}}"
                                     rate-it-options="ctrl.scoreRateItOptionsHeader"></score-view-header>
                             </div>
+                        </div> -->
+                        <!-- <div class="team-quality-desc">
+                            90-day Pipeline Health
+                        </div> -->
+                        <div class="team-quality-desc" ng-if="ctrl.teamDashboardId(team)">
+                            <score-view-header dashboard-id="{{ctrl.teamDashboardId(team)}}"
+                                    rate-it-options="ctrl.scoreRateItOptionsHeader"></score-view-header>
                         </div>
                         <div class="team-quality-desc">
-                            90-day Pipeline Health
-                        </div>
-
+                            <table class="team-quality-maturity">
+                                <tr>
+                                    <td class="left-col">
+                                        90-day Pipeline Health
+                                    </td>
+                                    <td style="text-align: right;" class="right-col">
+                                        <div  ng-init="ctrl.initPerc(team)">
+                                            <div ng-click="ctrl.viewGatesDetails(team)">
+                                                DevOps Maturity - <span><a href="" class="cicd-result">
+                                                        {{team.passedGates}}/{{team.totalGates}}</a></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>  
                         <div class="team-quality-trends">
                             <div class="trend-wrap-animation trend-wrap-7">
                                 <div class="trend">
@@ -120,7 +143,7 @@
                                             caption="Func tests passed"></product-team-summary-field>
                                 </div>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
 

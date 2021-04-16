@@ -9,6 +9,7 @@ package-lock.json
 # Logs
 logs
 *.log
+*.out
 
 # Runtime data
 pids
@@ -48,3 +49,5 @@ bower_components
 src/**/*.css
 /bin
 /target/
+
+# Project specific artifacts

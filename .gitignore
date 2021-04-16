@@ -21,7 +21,7 @@ hs_err_pid*
 *.iml
 *.ipr
 out
-build
+./build/
 .gradle
 gradle.properties
 .idea
@@ -29,6 +29,7 @@ common/src/querydsl
 common/src/generated
 core/src/generated
 *.log
+*.out
 target
 UI/node
 UI/src/app/local-testing.js
@@ -49,3 +50,16 @@ logs
 .pmd
 .classpath
 application.properties
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+UI/node_modules
+
+# Bower intermediate storage
+UI/bower_components
+
+# Project specific artifacts
+UI/src/**/*.css
+UI/bin
+UI/target/
+
